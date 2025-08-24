@@ -1,21 +1,33 @@
 % !TEX root = ../Thesis.tex
 
-\chapter{Introduction}
+\chapter{Introduzione}
 
-The introduction is usually a short chapter that can be read in less than 10 minutes.
-
-The goal of the Introduction is to engage the reader (why you should keep reading).
-You don't have to discuss anything in detail. Rather, the goal is to tell the reader:
-\begin{itemize}
-%  \item Why something has to be done (why the thesis topic is important),
-  \item what is the problem dealt with and why the problem is a problem;
-  \item what is the particular topic you're going to talk about in the thesis;
-  \item what are your goals in doing so, and what methodology do you follow;
-  \item what are the implications of your work.
-\end{itemize}
-
-The above points will be further expanded in the following chapters, so only a glimpse is essential. 
-
+I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che permette loro di
+acquisire immagini della superficie terrestre indipendentemente dalle condizioni meteorologiche 
+e dalla luce solare. Il funzionamento di questo tipo di satellite si basa sull'uso di  onde radar 
+che vengono inviate verso la Terra. Questi impulsi elettromagnetici rimbalzano sul terreno e sugli 
+oggetti come edifici o vegetazione e tornano al satellite. Quest'ultimo analizzando il segnale di 
+ritorno riesce ad ottenere informazioni sia sull'intensità del riflesso sia sul tempo impiegato 
+dal segnale per tornare, dati fondamentali per ricostruire l'immagine del territorio. Il punto 
+di forza del SAR è l'apertura sintetica. Poichè il satellite si muove lungo la sua orbita, i 
+segnali raccolti in posizioni diverse vengono combinati insieme. Questo processo permette di 
+simulare un'antenna molto più grande di quella reale, ottenendo così immagini ad altissima 
+risoluzione, molto piu dettagliate di quelle che un radar di dimensioni fisiche limitate potrebbe 
+generare da solo. In pratica, il movimento del satellite trasforma un radar relativamente piccolo 
+in uno strumento potentissimo per osservare il pianeta. L'immagine così generata però presenta un 
+particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
+questo non riflette semplicemente un segnale uniforme. In realtà, il segnale viene riflesso da 
+moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. Tutti questi 
+ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
+interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore del satellite o 
+del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
+che rende l'immagine difficle da interpretare ed analizzare. Il processo di riduzione dello speckle 
+prende il nome di despeckling. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
+però perdere le informazioni reali presenti nell'immagine. In letteratura vi sono molteplici 
+approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
+più sofisticate come statistica multivarianza o metodi di deep learning. Ogni approccio ha i suoi
+punti di forza e le sue lacune sulla base del tipo di ambiente rappresentato nell'immagine. Lo scopo
+di questa tesi è cercare di unire i punti di forza di alcuni modelli in modo da ottenere l'immagine 
+con il despeckling più accurato possibile
 \medskip
 
-It is customary to conclude the Introduction with a summary of the content of the rest of the thesis. One or two sentences are enough for each chapter.

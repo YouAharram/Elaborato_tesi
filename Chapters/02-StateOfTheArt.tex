@@ -1,24 +1,45 @@
 % !TEX root = ../Thesis.tex
 
 \chapter{State of the Art}
-
-The State of the Art chapter is where you discuss \ldots well, the state of the art. Obvious, isn't it?
-
-You have to explain the main research papers related to your thesis and their shortcomings.
-
-It's up to the writer to cite everything or just the sources that are directly relevant to the research topic, and the choice also depends on the kind of thesis work.
-
-For example, one might refer to~\cite{knuth97} as one of the first books about algorithms and programming issues, or~\cite{nash51} for the foundations of Game Theory.
-
-Nevertheless, referring to standards (see~\cite{rfc1925}) for a more accurate technology description is also important.
-
-It is customary to end this chapter by recapping that, given the current state of the art, there is a gap in the knowledge that must be filled - and this is the goal of the present work.
-
-This chapter and the bibliography are an essential part of the thesis. They show that you did your research starting from solid foundations, and they allow the reader to both replicate your results and continue your work.
-Hence, the bibliography must be good (relevant works of solid reputation) and correct (allow the reader to find the referenced paper).
-
-One of the best ways to do so is to create your bibliography using a tool, e.g., JabRef\footnote{\url{https://www.jabref.org}}, which will help you in organising the bibliography. JabRef (or an equivalent tool) will help you in creating a bibliographic database (a so-called \texttt{.bib} file). Only the entries effectively cited will be imported into the thesis with the correct citation style.
-
-A more straightforward way to organise the bibliographic entries of the papers, books, or whatever you cite in the thesis is to just write them into a text file named *.bib.
-
-Note that most websites allow you to download the bibliographic entry of a paper (or book, or whatever) directly. For example, IEEEXplore has a button ``Cite This'' that allows you to download the entry and copy-paste it into your bibliographic tool. Just select `BibTeX', copy-paste, and you will have the correct entry (well, mostly, always double-check).
+Negli ultimi trant'anni sono stati proposti numerosi metodi per la riduzione dello speckle nelle immagini SAR.
+ I primi approcci sfruttano filti spaziali come Lee, Frost e Kuan.
+Questi operavano direttamente nel dominio dell'immagine, cioè sui pixel, sfruttando finestre locali per stimare
+ statisticamente il rumore e ridurlo. Erano strumenti semplici, poco costosi dal punto 
+di vista computazionale ed efficaci ma soffrivano di un limite strutturale. Per attenuare lo speckle tendevano a 
+smussare anche i dettagli fini, specialmente lungo i bordi o nelle aree eterogenee. 
+Con lo sviluppo della teoria delle trasformate multisensoriale negli anni Novanta , si passò ad un approccio diverso. 
+Invece di agire direttamente sul'immagine, si inziò a trasformarla in un dominio 
+in cui il segnale e il rumore potessero essere seprati. Nascono così i metodi basati su trasformata, come quelli che 
+usano wavelet. Questi strumenti rappresentano un'evoluzione concettuale dei filtri spaziali,
+perchè superano alcune loro debolezze: riescono a distinguere meglio il rumore dalle strutture significative, ad 
+adattarsi a diverse scale ed a preservare in maniera più accurata bordi, texture e linee sottili. 
+Tuttavia, portano con sè una maggiore complessità computazionale e la possibilità di introdurre artefatti se non 
+calibrati con attenzione. Infine dato che lo speckle è un rumore moltiplicativo e non semplicemente 
+additivo, se non viene trasformato prima, la wavelet può non essere del tutto efficace. 
+Alcuni di queste tipologie di filtri sono stati illustrati e confrontate nell'articolo \textit{A Tutorial on Speckle
+Reduction in Synthetic Aperture Radar Images}  \cite{tutorSpeckle}.
+Negli ultimi anni, l'attenzione si è spostata ancora più avanti verso i metodi non locali, come i filtri non local means o 
+BM3D adattati per le immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
+introno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 
+corrispondenze per ridurre il rumore. In questo modo lo speckle viene attenuato in maniera molto efficace, mentre 
+i dettagli strutturali si preservao quasi intatti. La qualità delle immagini risultanti è generalmente
+superiore a quella ottenuta con filtri locali o multirisoluzione, ciò comporta però un costo computazionale elevato 
+e la necessità di algoritmi sofisticati per gestire le similitudini tra regioni. Negli ultimi dieci 
+anni si è aperta una nuova fase, spinta dall'esplosione del deep learning. Come riportato nell'articolo 
+\textit{Deep Learning for SAR Images Despeckling} \cite{DL_SAR}, l'idea è che le reti neurali, in 
+particolare convoluzionalil o basate su autoencoder, possano imparare direttamente dai dati le caratteristiche
+dello speckle e il modo migliore per ridurlo. Questo approccio non si basa più nell'assumere una ditribuzione 
+statistica del rumore o una struttura matematica da preservare, ma si affida alla capacità della rete di 
+apprendere automaticamante dalle coppie di immagini rumorose e pulite. I risultati hanno portato ad una qualità 
+visiva migliore e un eccellente preservazione dei dettagli. D'altro canto, le reti neurali hanno bisogno 
+di grandi quantità di dati ben calibrati per l'addestramento e possono soffrire di scarsa generalizzazione se 
+applicate a scenari diversi da quelli su cui sono state addestrate oltre che ad un costo computazionale molto elevato. Le performance dei modelli di despeckling non è uniforme per tutti i tipi di scenari.La loro efficacia può variare
+in base alle caratteristiche statistiche del bioma come contesti di vegetazione, aree rocciose e urbane, 
+poichè la distribuzione del rumore e le strutture da preservare differiscono sensibilmente. Un'immagine SAR potrebbe 
+comprendere due o più tipi di biomi, ciò implica che utlizzando un unico modello di despeckling, 
+indipendetemente da quale esso sia, l'immagine risultante avrà aree in cui è stata ripulita meglio e aree in cui è 
+stata ripulita peggio a seconda di dove il modello per come è stato realizzato ha più facilità ad operare.
+L'obiettivo della tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
+in modo tale che l'immagine risultante rispecchi il più possibile la realtà. Questo tipo di approccio non va a 
+reinventare la ruota cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
+a sfruttare i punti di forza di ciascun modello. 
