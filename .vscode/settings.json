@@ -16,7 +16,8 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-pdf",
-                "-outdir=build",
+                "-auxdir=build", // tutti i file temporanei
+                "-output-directory=PDF", // PDF e tutto il resto
                 "%DOC%"
             ]
         }
