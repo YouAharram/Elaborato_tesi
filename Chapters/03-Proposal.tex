@@ -1,36 +1,23 @@
-% !TEX root = ../Thesis.tex
+% !TEX root SCHISADCJPOA JPFDÈOC KJ+ÒLDkc= ../Thesis.tex
 
-\chapter{Tabella di confronto tramite PSNR dei vari modelli  }
+\chapter{ORGANIZZAZIONE DATASET DELLA RETE NEURALE PER LA MAPPA DI QUALITÀ}
 
-
-\begin{table}[h] % ambiente table per inserire una didascalia
+\begin{figure}[h] % [h] = here, posiziona dove possibile
     \centering
-    \begin{tabular}{|c|c|c|c|c|}
-    \hline
-    Bioma & SAR-CAM & FANS & SARBM3D & TESI \\ \hline
-    Agricultural &  24.95  & 24.58  & 25.37 & 19.07  \\ \hline
-    Airplane & 26.07 & 23.91 & 23.20 & 23.64 \\ \hline
-    Baseball diamond & 28.50 & 27.20 & 26.87 &  21.05\\ \hline
-    Beach & 28.89 & 25.84 & 24.50 & 16.11 \\ \hline
-    Buldings & 24.51 & 22.23 & 21.52 & 21.89 \\ \hline
-    Chaparral & 22.93 & 21.49 & 22.43 & 18.78 \\ \hline
-    Forest & 26.48 & 25.66 & 25.97 & 18.44 \\ \hline
-    Freeway & 25.88 & 24.03 &  23.89 & 21.22 \\ \hline
-    Golf course& 28.41 & 27.23 & 26.97 & 20.86 \\ \hline
-    Harbor & 23.17 & 21.09 & 20.56 & \\ \hline
-    Intersection & 24.98 & 23.51 & 23.44 & \\ \hline
-    Mobile homepark& 23.00 & 21.32 & 20.74 & \\ \hline
-    Overpass & 25.46 & 23.79 & 23.56 & \\ \hline
-    Parkinglot & 22.36 & 21.01 & 20.69 & \\ \hline
-    River & 25.76 & 24.86 & 25.03 & \\ \hline
-    Runway & 27.22 & 24.88 & 24.82 & \\ \hline
-    Sparse residential & 25.27 & 24.01 & 24.00 & \\ \hline
-    Storage tanks & 25.67 & 23.63 & 22.91 & \\ \hline
-    Tennis court & 25.99 & 24.70 & 24.62 & \\ \hline
-    \end{tabular}
-    \caption{I valori sopra, indicano la media del PSNR di 100 immagini.
-    Ogni modello usato in TESI è stato allenato per 3 epoche con un dataset da 30'000 immagini.
-    Mi sono fermato a 3 epoche perchè il valore di loss raggiunge valori molto bassi, tipo 0.005}
-    \label{tab:esempio}
-    \end{table}
-    
+    \includegraphics[width=0.8\textwidth]{utils/Architettura_rete_neurale.jpg}
+    \caption{Mock della struttura della rete neurale per la previsione della qualità}
+    \label{fig:MockReteNeurale}
+\end{figure}
+
+Come illustrato in Figura \ref{fig:MockReteNeurale}, il dataset impiegato è costituito da tre tipologie di 
+immagini: clean, noisy e denoised. Queste immagini sono state realizzate tramite uno strumento ottico di un
+satellite per poi essere sporcate con speckle artificiale e su cui infine è stato fatto denoising. Questa scelte è stata fatta
+in quanto risulta difficile reperire un dataset contenente immagini SAR abbastanza grande per poter 
+addestrare una rete neurale. Le immagini su cui viene fatto l'addestramento sono relative ad un singolo modello di despeckling ed ad 
+un determinato look. Quest'ultimo è una metrica che indica l'intensità dello speckle artificiale, in quanto a più look 
+corrispondono più catture di quella che è la realtà di interessa e quindi si ha una maggior precisione e uno speckle ridotto.
+In fase di addestramento, le immagini noisy e denoised vengono concatenate in un unico tensore a due canali e utilizzate come 
+input per la rete neurale. Le immagini clean, invece, assieme a quelle denoised, vengono impiegate per la 
+generazione della mappa di qualità, che costituisce il riferimento necessario per 
+il calcolo della funzione di perdita. Questo permette al modello di imparare a 
+prevedere la qualità del denoising relative ad un dato modello di despeckling e ad determinato   

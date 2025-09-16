@@ -34,21 +34,13 @@ apprendere automaticamante dalle coppie di immagini rumorose e pulite. I risulta
 visiva migliore e un eccellente preservazione dei dettagli. D'altro canto, le reti neurali hanno bisogno 
 di grandi quantità di dati ben calibrati per l'addestramento e possono soffrire di scarsa generalizzazione se 
 applicate a scenari diversi da quelli su cui sono state addestrate oltre che ad un costo computazionale molto elevato. 
-Le performance dei modelli di despeckling non è uniforme per tutti i tipi di scenari.La loro efficacia può variare
+Le performance dei modelli di despeckling non è uniforme per tutti i tipi di scenari. La loro efficacia può variare
 in base alle caratteristiche statistiche del bioma come contesti di vegetazione, aree rocciose e urbane, 
 poichè la distribuzione del rumore e le strutture da preservare differiscono sensibilmente. Un'immagine SAR potrebbe 
 comprendere due o più tipi di biomi, ciò implica che utlizzando un unico modello di despeckling, 
 indipendetemente da quale esso sia, l'immagine risultante avrà aree in cui è stata ripulita meglio e aree in cui è 
 stata ripulita peggio a seconda di dove il modello per come è stato realizzato ha più facilità ad operare.
-L'obiettivo della tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
+L'idea da cui nasce questa tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
 in modo tale che l'immagine risultante rispecchi il più possibile la realtà. Questo tipo di approccio non va a 
-reinventare la ruota cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
-a sfruttare i punti di forza di ciascun modello. Questo approccio che sfrutta tecniche moderne come la CNN permette di superare la necessità di individuare un unico 
-modello di despeckling, che per sua natura tende a incontrare difficoltà in specifiche porzioni dell’immagine, ad 
-esempio in presenza di determinati biomi poco adatti alle sue caratteristiche, senza comunque garantire risultati 
-ottimali. Al contrario, essa combina più modelli che si integrano tra loro, compensando reciprocamente le rispettive 
-limitazioni.
-
-
-
-----------------------------------------------------
+reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
+a sfruttare i punti di forza di modelli già esistenti.  
