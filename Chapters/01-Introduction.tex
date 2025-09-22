@@ -5,7 +5,7 @@
 I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che permette
 loro di acquisire immagini della superficie terrestre indipendentemente dalle 
 condizioni meteorologiche e dalla luce solare. I satelliti SAR, grazie a questa loro 
-capacita, trovano applicazione in molteplici contesti disciplinari. Ambito geologico, 
+capacita, trovano applicazione in molteplici contesti. In ambito geologico, 
 sono impiegati per il monitoraggio del suolo e dei processi 
 geomorfologici, consentendo la mappatura di foreste, deserti e aree soggette a 
 trasformazioni ambientali. Inoltre, risultano particolarmente efficaci nell’analisi 
@@ -32,17 +32,36 @@ moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edific
 ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
 interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore del satellite o 
 del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
-che rende l'immagine difficle da interpretare ed analizzare. Il processo di riduzione dello speckle 
+che rende l'immagine difficile da interpretare ed analizzare. Il processo di riduzione dello speckle 
 prende il nome di despeckling. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
 però perdere le informazioni reali presenti nell'immagine. In letteratura vi sono molteplici 
 approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
 più sofisticate come statistica multivarianza o metodi di deep learning. Ogni approccio ha i suoi
 punti di forza e le sue lacune sulla base del tipo di ambiente rappresentato nell'immagine. 
 Lo scopo di questa tesi è cercare di unire i punti di forza di alcuni modelli in modo da ottenere l’immagine
-con il despeckling più accurato possibile. Per ottenere ciò si utlizza tecniche di machine learning
+con il despeckling più accurato possibile. Un primo approccio per ottenere ciò consiste nell' utlizzare tecniche di machine learning
 per predire la qualità di un immagine denoised attraverso una mappa di qualità. Ad ogni modello,
 è associata una mappa che indica, pixel per pixel dove il modello ha funzionato meglio e 
-dove invece peggio. Queste mappe sono essenziali nel processo di fusione delle immagini despeckled 
-dei vari modelli in un unica immagine, in quanto determino i pesi della una media pesata.
+dove invece peggio. La fusione avviene tramite la media pesata dove i relativi pesi 
+sono le mappe di qualità. Questo approccio però non sfrutta al massimo i punti di forza 
+di ogni singola immagine despeckled portando ad un risulato finale non soddisfacente, 
+in quanto la qualità del denoising viene stimata concentrandosi sul singolo pixel senza 
+guardare i vicini. Un secondo approccio più efficiente è basato sull’attenzione. Invece 
+di utilizzare mappe di qualità che determinano la bontà del denoising di un singolo 
+pixel, si utilizza un meccanismo di cross attention. Questo consente di andare oltre 
+la valutazione locale pixel-per-pixel, mettendo in relazione l’informazione proveniente 
+da più immagini despeckled e valorizzando i dettagli complementari.
+Il cross attention, infatti, nasce nel contesto della fusione multimodale di immagini 
+(ad esempio infrarosso e visibile) e mira a combinare i punti di forza di diverse fonti 
+mantenendo l’informazione complementare ed eliminando quella ridondante.
+La chiave è che, mentre la self-attention tende a enfatizzare le correlazioni interne ad 
+una singola immagine (quindi rischia di rafforzare il rumore residuo), la cross-attention 
+sfrutta l’eterogeneità tra le diverse versioni despeckled per mettere in evidenza le 
+informazioni non correlate, cioè i dettagli che risultano più affidabili in una ricostruzione 
+ma assenti o degradati nelle altre. In questo modo il modello riesce a potenziare le componenti 
+salienti e a ridurre le parti rumorose. Questo approccio consente di ottenere un’immagine despeckled più accurata e leggibile, perché 
+tiene conto non solo del valore di ogni singolo pixel, ma anche del contesto e della complementarità 
+tra più metodi di denoising, superando i limiti della semplice media pesata.
+
 \medskip
 

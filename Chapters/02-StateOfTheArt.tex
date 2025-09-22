@@ -43,4 +43,22 @@ stata ripulita peggio a seconda di dove il modello per come è stato realizzato 
 L'idea da cui nasce questa tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
 in modo tale che l'immagine risultante rispecchi il più possibile la realtà. Questo tipo di approccio non va a 
 reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
-a sfruttare i punti di forza di modelli già esistenti.  
+a sfruttare i punti di forza di modelli già esistenti. Inizialmente è stata usata una tecnica naive che 
+prevede un architettura Unet per addestare tanti modelli quante sono le tecniche di despeckling 
+della quale si vuole imparare a prevedere la qualità del denoising generando così mappe di qualità 
+che determinano quanto dell'immagine denoised di un  modello prendere in relazione alla bontà del denoising.
+Questa tecnica però non sfrutta a pieno le qualità dei singoli modelli in quanto la stima della qualità è locale 
+e si concentra sul singolo pixel, perdendo informazione contestuale importante. 
+Inoltre la combinazione pesata a livello di pixel non sfrutta la complementarità tra caratteristiche a livello di 
+patch, perciò non valorizza pienamente i punti di forza di ciascun metodo
+Un approccio migliore è basato sull'articolo 
+\textit{CrossFuse: A Novel Cross Attention Mecha-
+nism based Infrared and Visible Image Fusion Approach.} \cite{li2024crossfuse} che sfrutta tecniche basate sull'attenzione 
+incrociata. Gli approcci basati su questa tecnica propongono esattamente questa linea di azione: 
+invece di pesare singoli pixel, si estraggono rappresentazioni (feature) dai diversi output despeckled e si usa un modulo 
+di attenzione per selezionare, a livello di feature e di contesto, quali informazioni preservare e quali attenuare. 
+Questo approccio permette di superare i limiti del pixel-per-pixel, in quanto una fusione basata su patch consente 
+di catturare informazioni contestuali e di valorizzare le relazioni strutturali presenti nell’immagine. Operando 
+su blocchi di feature e non su singoli pixel isolati, il modello è in grado di preservare meglio i bordi e le 
+discontinuità: la coerenza spaziale della patch riduce il rischio di smussare i contorni netti, tipico delle 
+fusioni locali.

@@ -1,10 +1,10 @@
 % !TEX root SCHISADCJPOA JPFDÈOC KJ+ÒLDkc= ../Thesis.tex
 
 \chapter{Primo approccio}
-Il primo approccio divideva il problema in due parti. La prima è relativa alla previsine della qualità tramite tecniche 
-di machine learning di immagini denoised. La seconda parte invece riguarda la fusione delle immagini.
+Il primo approccio divide il problema in due parti. La prima è relativa alla previsine della qualità tramite tecniche 
+di machine learning. La seconda parte invece riguarda la fusione delle immagini denoised di ogni modello.
 
-\section{Previsione della qualità: dataset}
+\section{Dataset}
 
 
 
@@ -13,9 +13,9 @@ immagini: clean, noisy e denoised. Queste immagini sono state realizzate tramite
 satellite per poi essere sporcate con speckle artificiale e su cui infine è stato fatto denoising. Questa scelta è stata fatta
 in quanto risulta difficile reperire un dataset contenente immagini SAR abbastanza grande da poter essere utlizzato per 
 addestrare una rete neurale. Le immagini su cui viene fatto l'addestramento sono relative ad un singolo modello di despeckling ed ad 
-un determinato look. Quest'ultimo è una metrica che indica l'intensità dello speckle artificiale, in quanto a più look.
+un determinato look. Quest'ultimo è una metrica che indica l'intensità dello speckle artificiale, in quanto a più look,
 corrispondono più catture di quella che è la realtà di interesse e quindi si ha una maggior precisione e uno speckle ridotto.
-In fase di addestramento, le immagini noisy e denoised vengono concatenate in un unico tensore a due canali e utilizzate come 
+In fase di addestramento, le immagini noisy e denoised vengono concatenate in un unico tensore a due dimensioni e utilizzate come 
 input per la rete neurale. Le immagini clean, invece, assieme a quelle denoised, vengono impiegate per la 
 generazione della mappa di qualità, che costituisce il riferimento necessario per 
 il calcolo della funzione di perdita. Questo permette al modello di imparare a 
@@ -27,38 +27,37 @@ prevedere la qualità del denoising relative ad un dato modello di despeckling e
     \label{fig:MockReteNeurale}
 \end{figure}
 
-\section{Previsione della qualità: Architettura rete neurale}
+\section{Architettura rete neurale}
 Come Architettura della rete neurale è stata utilizzata la Unet. Questo perchè risulta particolarmente adatto per la 
 generazione di una mappa di qualità che valuti l'affidabilità di un'immagine sottoposta a denoising. Il compito di 
 questa rete è assegnare a ciascun pixel un valore continuo compreso nell'intervallo $[0,1]$ che ne rappresenti la 
 qualità locale. Questo output per la sua natura richiede un'architettura in grado di produrre una mappa di densità 
 della stessa risoluzione spaziale dell'input, preservando la localizzazione precise delle informazioni. 
-L'architettura è composta da due bracci principali. Il braccio sinistro (encoder) opera una contrazione 
-progressiva, applicando strati convoluzionali e di pooling per estrarre features astratte e gerarchiche 
-dall'input. Questo processo permette alla rete di comprendere il contenuto semantico dell'immagine e la 
-natura del rumore, apprendendo a riconoscere pattern complessi come texture, bordi e regioni omogenee. 
-Il braccio destro (decoder) svolge il compito simmetrico di espansione, ricostruendo gradualmente la 
-risoluzione spaziale attraverso operazioni di up-sampling e convoluzioni. È questa struttura ad "U" 
-che permette di trasformare le feature astatte e globali apprese dall'encoder in una mappa 
-dettagliata. L'elemento più innovativo dell'architettura U-Net è la presenza di connessioni skip che collegano i layer 
-dell'encoder ai layer corrispondenti nel decoder. Questi collegamenti trasferiscono le mappe di feature 
-ad alta risoluzione dalla fase di contrazione a quella di espansione. La loro presenza, è rilevante per la 
-corretta generazione della mappa di qualità. Senza di esse, il decoder avrebbe perso l'informazione spaziale riguardante 
-l'esatta localizzazione di dettagli critici come bordi sottili o piccole texture. Poiché sono proprio 
-queste aree ad essere più suscettibili ad artefatti da oversmoothing o errata ricostruzione da parte degli 
-algoritmi di denoising, le skip connections forniscono al decoder il contesto spaziale necessario per 
-produrre una valutazione di qualità estremamente precisa e localizzata.Il modello deve superare la semplice stima 
-di una differenza assoluta tra l'immagine denoised e un ground truth ideale. 
-Deve invece sviluppare una percezione semantica dell'errore, ossia la capacità di valutare la gravità di una discrepanza 
-in base al contesto visivo in cui appare. Un errore di grande entità in una regione uniforme (es. un cielo sereno) è 
-percepibilmente molto più fastidioso di un errore di pari entità in una regione altamente texturizzata (es. del fogliame), 
-dove può essere naturalmente mascherato. Analogamente, un piccolo errore di disallineamento su un bordo netto può essere molto 
-visibile e quindi criticabile. L'encoder della U-Net, stratificando features da semplici a complesse, apprende automaticamente 
-questa gerarchia di contenuti visivi. Il modello può dunque fondere la misura dell'errore con la comprensione del significato 
-dell'area in cui esso si manifesta, producendo una mappa di qualità che pesa intelligentemente l'importanza visiva di ogni discrepanza.
+L'architettura è composta da due parti principali: encoder e decoder. 
+L’architettura è organizzata in due parti principali:
+Encoder (contrazione): una sequenza di blocchi convoluzionali e operazioni di pooling che estraggono feature 
+gerarchiche via via più astratte, consentendo alla rete di catturare il contenuto semantico dell’immagine, 
+distinguere texture, bordi e regioni omogenee, e modellare la natura statistica del rumore.
+Decoder (espansione): una fase simmetrica che ricostruisce progressivamente la risoluzione spaziale 
+mediante up-sampling e convoluzioni, trasformando le feature ad alto livello in una mappa di 
+qualità densa e dettagliata.
+Elemento distintivo della U-Net sono le skip connections, che collegano i livelli dell’encoder ai corrispondenti 
+livelli del decoder. Questi collegamenti trasferiscono mappe di feature ad alta risoluzione direttamente al decoder, 
+preservando l’informazione spaziale fine indispensabile per localizzare correttamente dettagli critici come bordi 
+sottili e piccole texture. Senza tali connessioni, il decoder produrrebbe output più sfocati, perdendo la capacità 
+di discriminare le aree più sensibili agli artefatti di oversmoothing o agli errori di ricostruzione.
+L’aspetto più importante di questo modello è la sua capacità di andare oltre una semplice misura di errore pixel-wise. 
+La rete apprende a sviluppare una vera e propria percezione semantica dell’errore, cioè a valutare la gravità di una 
+discrepanza in funzione del contesto visivo in cui compare. Ad esempio, un errore di grande entità in una regione 
+uniforme (come un cielo sereno) è visivamente più disturbante di un errore di pari entità in una regione altamente 
+texturizzata (come del fogliame), dove può essere facilmente mascherato. Analogamente, un piccolo errore su un bordo 
+netto è percettivamente rilevante. L’encoder, stratificando feature di complessità crescente, apprende questa gerarchia 
+di contenuti visivi e fornisce al decoder le informazioni necessarie per produrre una mappa di qualità che pondera 
+ogni errore in base alla sua importanza percettiva.
+
 \section{Fusione dei modelli}
 La fusione delle immagini denoised $[I]$ prodotte tramite i rispettivi modelli di despeckling vengono fusi attraverso una media pesata sfuttando
-le mappa di qualità $[M]$ come pesi per le singole immagini ovvero:
+le mappa di qualità $[M]$ come pesi per le singole immagini.
 \begin{equation}
     \makebox[\textwidth][c]{%
       $\displaystyle
@@ -68,10 +67,59 @@ le mappa di qualità $[M]$ come pesi per le singole immagini ovvero:
 \end{equation}
 Non è una fusione "cieca" (es. una media semplice). È un processo che si 
 comporta in modo diverso per ogni singolo pixel dell'immagine. Se il Modello A ha una qualità stimata 
-molto alta in una regione e il Modello B molto bassa, la fusione privilegerà quasi esclusivamente 
+molto alta in una regione e il Modello B molto bassa, la fusione privilegerà maggiormente 
 il Modello A in quell'area. Mentre alcuni sono eccellenti nel preservare i bordi netti ma possono lasciare del rumore residuo nelle aree lisce, 
 altri sono ottimi nell' eliminare il rumore dalle superfici lisce ma tendono a sfocare (oversmooth) i bordi e le texture.
 La fusione pesata permette di prendere il meglio di ogni modello usando l'output dell'algoritmo migliore per una data 
 caratteristica dell'immagine, scartando virtualmente i suoi contributi peggiori.
-  
+
+\section{Limitazioni}
+Sebbene la media pesata presenti il vantaggio di combinare in maniera coerente i contributi dei vari modelli di despeckling, 
+essa introduce alcune criticità che ne riducono l’efficacia in scenari complessi.
+In primo luogo, la media pesata tende a diluire i dettagli sottili. Se una delle immagini denoised contiene strutture fini 
+o bordi ben preservati che altre non hanno, questi dettagli possono risultare attenuati o addirittura persi, poiché la 
+media li combina con le versioni più lisce prodotte dagli altri modelli. Ciò porta a un effetto di oversmoothing, che riduce 
+il livello di dettaglio complessivo dell’immagine fusa.
+Un’ulteriore limitazione deriva dal fatto che la media pesata opera pixel per pixel, senza considerare la correlazione spaziale 
+tra pixel adiacenti. Pattern, texture e strutture complesse che sono distribuite su più pixel non vengono trattati in maniera 
+coerente. Questo può portare a artefatti locali, soprattutto ai bordi o in aree con pattern ripetitivi, dove una decisione 
+puramente puntuale può introdurre discontinuità.
+Inoltre, se il rumore è altamente non stazionario o presenta componenti strutturate, la rete che genera le mappe di qualità 
+può faticare a distinguere tra rumore residuo e dettaglio fine. In queste situazioni la mappa di qualità può risultare 
+inaccurata, assegnando un peso elevato a regioni che in realtà presentano artefatti o penalizzando aree visivamente corrette. 
+Questo porta a una fusione non ottimale, che può accentuare il rumore residuo o degradare regioni già ben restaurate.
+Va considerato anche il problema della sensibilità agli errori di predizione della mappa di qualità. Poiché i pesi influenzano 
+direttamente il risultato finale, eventuali errori nella stima della qualità si traducono in artefatti amplificati nell’immagine 
+fusa, specialmente se un singolo modello viene sovrastimato in regioni dove la sua qualità non è affidabile.
+
+% !TEX root = ../Thesis.tex
+
+\subsection{Tabella di confronto tramite PSNR dei vari modelli  }
+\begin{table}[H] % ambiente table per inserire una didascalia
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Bioma & SAR-CAM & FANS & SARBM3D & TESI \\ \hline
+    Agricultural &  24.95  & 24.58  & 25.37 & 19.07  \\ \hline
+    Airplane & 26.07 & 23.91 & 23.20 & 23.64 \\ \hline
+    Baseball diamond & 28.50 & 27.20 & 26.87 &  21.05\\ \hline
+    Beach & 28.89 & 25.84 & 24.50 & 16.11 \\ \hline
+    Buldings & 24.51 & 22.23 & 21.52 & 21.89 \\ \hline
+    Chaparral & 22.93 & 21.49 & 22.43 & 18.78 \\ \hline
+    Forest & 26.48 & 25.66 & 25.97 & 18.44 \\ \hline
+    Freeway & 25.88 & 24.03 &  23.89 & 21.22 \\ \hline
+    Golf course& 28.41 & 27.23 & 26.97 & 20.86 \\ \hline
+    \end{tabular}
+    \caption{Confronto dei modelli di despeckling e della loro fusione}
+    \label{tab:esempio}
+    \end{table}
+    I valori sopra, indicano la media del PSNR di 100 immagini rappresenti diversi biomi.
+    Ogni modello per la previsione della qualità, usato in TESI, 
+    è stato allenato per 3 epoche con un dataset da 30'000 
+    immagini. Come si puo notare dalla tabella \ref{fig:MockReteNeurale} 
+    questa tecnica di fusione non valorizza al meglio i singoli modelli 
+    portando il risultato finale ad essere peggiore di quello dei 
+    singoli modelli presi singolarmente
     
+
+
