@@ -1,12 +1,10 @@
 % !TEX root SCHISADCJPOA JPFDÈOC KJ+ÒLDkc= ../Thesis.tex
 
-\chapter{Primo approccio}
+\chapter{Approccio basato su rete Unet}
 Il primo approccio divide il problema in due parti. La prima è relativa alla previsine della qualità tramite tecniche 
 di machine learning. La seconda parte invece riguarda la fusione delle immagini denoised di ogni modello.
 
 \section{Dataset}
-
-
 
 Come illustrato in Figura \ref{fig:MockReteNeurale}, il dataset impiegato è costituito da tre tipologie di 
 immagini: clean, noisy e denoised. Queste immagini sono state realizzate tramite uno strumento ottico di un
@@ -72,8 +70,20 @@ il Modello A in quell'area. Mentre alcuni sono eccellenti nel preservare i bordi
 altri sono ottimi nell' eliminare il rumore dalle superfici lisce ma tendono a sfocare (oversmooth) i bordi e le texture.
 La fusione pesata permette di prendere il meglio di ogni modello usando l'output dell'algoritmo migliore per una data 
 caratteristica dell'immagine, scartando virtualmente i suoi contributi peggiori.
+\\\\
+\section{Funzione di loss}
+Come funzione di perdità è stata utilizzata la mean square error [MSE] tra l'output della fusione [I] 
+e il ground truth, ovvero l'immagine clean [$\hat{I}$]. 
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+    \text{MSE} = \left( I - \hat{I} \right)^2
+    $%
+  }
+\end{equation}
 
-\section{Limitazioni}
+
+\section{Limiti dei questa tecnica}
 Sebbene la media pesata presenti il vantaggio di combinare in maniera coerente i contributi dei vari modelli di despeckling, 
 essa introduce alcune criticità che ne riducono l’efficacia in scenari complessi.
 In primo luogo, la media pesata tende a diluire i dettagli sottili. Se una delle immagini denoised contiene strutture fini 
@@ -116,7 +126,7 @@ fusa, specialmente se un singolo modello viene sovrastimato in regioni dove la s
     I valori sopra, indicano la media del PSNR di 100 immagini rappresenti diversi biomi.
     Ogni modello per la previsione della qualità, usato in TESI, 
     è stato allenato per 3 epoche con un dataset da 30'000 
-    immagini. Come si puo notare dalla tabella \ref{fig:MockReteNeurale} 
+    immagini. Come si puo notare dalla tabella [\ref{fig:MockReteNeurale}] 
     questa tecnica di fusione non valorizza al meglio i singoli modelli 
     portando il risultato finale ad essere peggiore di quello dei 
     singoli modelli presi singolarmente
