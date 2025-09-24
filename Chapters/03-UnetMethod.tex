@@ -7,16 +7,26 @@ di machine learning. La seconda parte invece riguarda la fusione delle immagini 
 \section{Dataset}
 
 Come illustrato in Figura \ref{fig:MockReteNeurale}, il dataset impiegato è costituito da tre tipologie di 
-immagini: clean, noisy e denoised. Queste immagini sono state realizzate tramite uno strumento ottico di un
+immagini: clean, noisy e denoised tutte e tre ad un canale, ovvero in scala di grigi. Queste immagini sono state realizzate tramite uno strumento ottico di un
 satellite per poi essere sporcate con speckle artificiale e su cui infine è stato fatto denoising. Questa scelta è stata fatta
 in quanto risulta difficile reperire un dataset contenente immagini SAR abbastanza grande da poter essere utlizzato per 
 addestrare una rete neurale. Le immagini su cui viene fatto l'addestramento sono relative ad un singolo modello di despeckling ed ad 
 un determinato look. Quest'ultimo è una metrica che indica l'intensità dello speckle artificiale, in quanto a più look,
 corrispondono più catture di quella che è la realtà di interesse e quindi si ha una maggior precisione e uno speckle ridotto.
+Le immagini prima di essere passate alla rete vengono normalizzate nell'intervallo $[0,1]$.
 In fase di addestramento, le immagini noisy e denoised vengono concatenate in un unico tensore a due dimensioni e utilizzate come 
-input per la rete neurale. Le immagini clean, invece, assieme a quelle denoised, vengono impiegate per la 
-generazione della mappa di qualità, che costituisce il riferimento necessario per 
-il calcolo della funzione di perdita. Questo permette al modello di imparare a 
+input per la rete neurale. Le immagini clean $[\hat{I}]$, invece, assieme a quelle denoised $[I]$, vengono impiegate per la 
+generazione della mappa di qualità $[QM]$, che costituisce il riferimento necessario per 
+il calcolo della funzione di perdita. Questa mappa viene generata facendo la diffrenze in valore assoluto delle due immagini:
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+      QM = |\hat{I} - I |
+    $%
+  }
+\end{equation}
+
+Questo permette al modello di imparare a 
 prevedere la qualità del denoising relative ad un dato modello di despeckling e ad una determinata intensità dello speckle. 
 \begin{figure}[H]
     \centering
@@ -26,17 +36,16 @@ prevedere la qualità del denoising relative ad un dato modello di despeckling e
 \end{figure}
 
 \section{Architettura rete neurale}
-Come Architettura della rete neurale è stata utilizzata la Unet. Questo perchè risulta particolarmente adatto per la 
+Come architettura della rete neurale è stata utilizzata la Unet. Questo perchè risulta particolarmente adatto per la 
 generazione di una mappa di qualità che valuti l'affidabilità di un'immagine sottoposta a denoising. Il compito di 
-questa rete è assegnare a ciascun pixel un valore continuo compreso nell'intervallo $[0,1]$ che ne rappresenti la 
+questa rete è assegnare a ciascun pixel un valore compreso nell'intervallo $[0,1]$ che ne rappresenti la 
 qualità locale. Questo output per la sua natura richiede un'architettura in grado di produrre una mappa di densità 
 della stessa risoluzione spaziale dell'input, preservando la localizzazione precise delle informazioni. 
 L'architettura è composta da due parti principali: encoder e decoder. 
-L’architettura è organizzata in due parti principali:
-Encoder (contrazione): una sequenza di blocchi convoluzionali e operazioni di pooling che estraggono feature 
+Encoder, ovvero una sequenza di blocchi convoluzionali e operazioni di pooling che estraggono feature 
 gerarchiche via via più astratte, consentendo alla rete di catturare il contenuto semantico dell’immagine, 
 distinguere texture, bordi e regioni omogenee, e modellare la natura statistica del rumore.
-Decoder (espansione): una fase simmetrica che ricostruisce progressivamente la risoluzione spaziale 
+Decoder, una fase simmetrica che ricostruisce progressivamente la risoluzione spaziale 
 mediante up-sampling e convoluzioni, trasformando le feature ad alto livello in una mappa di 
 qualità densa e dettagliata.
 Elemento distintivo della U-Net sono le skip connections, che collegano i livelli dell’encoder ai corrispondenti 
@@ -66,14 +75,14 @@ le mappa di qualità $[M]$ come pesi per le singole immagini.
 Non è una fusione "cieca" (es. una media semplice). È un processo che si 
 comporta in modo diverso per ogni singolo pixel dell'immagine. Se il Modello A ha una qualità stimata 
 molto alta in una regione e il Modello B molto bassa, la fusione privilegerà maggiormente 
-il Modello A in quell'area. Mentre alcuni sono eccellenti nel preservare i bordi netti ma possono lasciare del rumore residuo nelle aree lisce, 
+il Modello A in quella determinata area. Mentre alcuni sono eccellenti nel preservare i bordi netti ma possono lasciare del rumore residuo nelle aree lisce, 
 altri sono ottimi nell' eliminare il rumore dalle superfici lisce ma tendono a sfocare (oversmooth) i bordi e le texture.
-La fusione pesata permette di prendere il meglio di ogni modello usando l'output dell'algoritmo migliore per una data 
-caratteristica dell'immagine, scartando virtualmente i suoi contributi peggiori.
+La fusione pesata permette di prendere il meglio di ogni modello usando di più l'output dell'algoritmo migliore per una data 
+caratteristica dell'immagine, e meno i suoi contributi peggiori.
 \\\\
 \section{Funzione di loss}
 Come funzione di perdità è stata utilizzata la mean square error [MSE] tra l'output della fusione [I] 
-e il ground truth, ovvero l'immagine clean [$\hat{I}$]. 
+e il ground truth [$\hat{I}$], ovvero l'immagine clean . 
 \begin{equation}
   \makebox[\textwidth][c]{%
     $\displaystyle
@@ -81,6 +90,23 @@ e il ground truth, ovvero l'immagine clean [$\hat{I}$].
     $%
   }
 \end{equation}
+
+
+\section{Metrica utilizzata per la valutazione delle immagini despeckled}
+Per la valutazione della qualità delle immagini despeckled è stata utilizzata la metrica PSNR come indicatore.
+Il PSNR (Peak Signal-to-Noise Ratio) è una metrica usata per misurare la qualità di un’immagine ricostruita o 
+compressa rispetto a un’immagine di riferimento (ground truth). 
+Si basa sull’errore quadratico medio (MSE, Mean Squared Error) tra i pixel dell’immagine originale e 
+quelli dell’immagine degradate/ricostruita. La formuala è: 
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
+    $%
+  }
+\end{equation}
+Dove $MAX_I$ è il valore massimo possibile per un pixel. Più alto è il PSNR, migliore è la qualità dell’immagine ricostruita.
+
 
 
 \section{Limiti dei questa tecnica}
@@ -104,7 +130,7 @@ fusa, specialmente se un singolo modello viene sovrastimato in regioni dove la s
 
 % !TEX root = ../Thesis.tex
 
-\subsection{Tabella di confronto tramite PSNR dei vari modelli  }
+\subsection{Tabella di confronto tramite PSNR dei vari modelli}
 \begin{table}[H] % ambiente table per inserire una didascalia
     \centering
     \begin{tabular}{|c|c|c|c|c|}

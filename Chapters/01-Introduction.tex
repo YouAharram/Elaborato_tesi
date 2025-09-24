@@ -48,10 +48,10 @@ di ogni singola immagine despeckled portando ad un risulato finale non soddisfac
 in quanto la qualità del denoising viene stimata concentrandosi sul singolo pixel senza 
 guardare i vicini. Un secondo approccio più efficiente è basato sull’attenzione. Invece 
 di utilizzare mappe di qualità che determinano la bontà del denoising di un singolo 
-pixel, si utilizza un meccanismo di cross attention. Questo consente di andare oltre 
+pixel, si utilizzano meccanismi basati sulla self e cross attention. Questo consente di andare oltre 
 la valutazione locale pixel-per-pixel, mettendo in relazione l’informazione proveniente 
 da più immagini despeckled e valorizzando i dettagli complementari.
-Il cross attention, infatti, nasce nel contesto della fusione multimodale di immagini 
+La cross attention, infatti, nasce nel contesto della fusione multimodale di immagini 
 (ad esempio infrarosso e visibile) e mira a combinare i punti di forza di diverse fonti 
 mantenendo l’informazione complementare ed eliminando quella ridondante.
 La chiave è che, mentre la self-attention tende a enfatizzare le correlazioni interne ad 

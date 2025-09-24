@@ -19,7 +19,7 @@ additivo, se non viene trasformato prima, la wavelet può non essere del tutto e
 Alcuni di queste tipologie di filtri sono stati illustrati e confrontate nell'articolo \textit{A Tutorial on Speckle
 Reduction in Synthetic Aperture Radar Images}  \cite{tutorSpeckle}.
 Negli ultimi anni, l'attenzione si è spostata ancora più avanti verso i metodi non locali, come i filtri non local means o 
-BM3D adattati per le immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
+SARBM3D adattati per le immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
 introno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 
 corrispondenze per ridurre il rumore. In questo modo lo speckle viene attenuato in maniera molto efficace, mentre 
 i dettagli strutturali si preservao quasi intatti. La qualità delle immagini risultanti è generalmente
@@ -28,9 +28,9 @@ e la necessità di algoritmi sofisticati per gestire le similitudini tra regioni
 anni si è aperta una nuova fase, spinta dall'esplosione del deep learning. Come riportato nell'articolo 
 \textit{Deep Learning for SAR Images Despeckling} \cite{DL_SAR}, l'idea è che le reti neurali, in 
 particolare convoluzionalil o basate su autoencoder, possano imparare direttamente dai dati le caratteristiche
-dello speckle e il modo migliore per ridurlo. Questo approccio non si basa più nell'assumere una ditribuzione 
+dello speckle e il modo migliore per ridurlo. Questo approccio non si basa più nell'assumere una distribuzione 
 statistica del rumore o una struttura matematica da preservare, ma si affida alla capacità della rete di 
-apprendere automaticamante dalle coppie di immagini rumorose e pulite. I risultati hanno portato ad una qualità 
+apprendere autonomamente dalle coppie di immagini rumorose e pulite. I risultati hanno portato ad una qualità 
 visiva migliore e un eccellente preservazione dei dettagli. D'altro canto, le reti neurali hanno bisogno 
 di grandi quantità di dati ben calibrati per l'addestramento e possono soffrire di scarsa generalizzazione se 
 applicate a scenari diversi da quelli su cui sono state addestrate oltre che ad un costo computazionale molto elevato. 
@@ -41,24 +41,23 @@ comprendere due o più tipi di biomi, ciò implica che utlizzando un unico model
 indipendetemente da quale esso sia, l'immagine risultante avrà aree in cui è stata ripulita meglio e aree in cui è 
 stata ripulita peggio a seconda di dove il modello per come è stato realizzato ha più facilità ad operare.
 L'idea da cui nasce questa tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
-in modo tale che l'immagine risultante rispecchi il più possibile la realtà. Questo tipo di approccio non va a 
+in modo tale che l'immagine risultante rispecchi il più possibile la realtà di interesse. Questo tipo di approccio non va a 
 reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
 a sfruttare i punti di forza di modelli già esistenti. Inizialmente è stata usata una tecnica naive che 
 prevede un architettura Unet per addestare tanti modelli quante sono le tecniche di despeckling 
 della quale si vuole imparare a prevedere la qualità del denoising generando così mappe di qualità 
 che determinano quanto dell'immagine denoised di un  modello prendere in relazione alla bontà del denoising.
 Questa tecnica però non sfrutta a pieno le qualità dei singoli modelli in quanto la stima della qualità è locale 
-e si concentra sul singolo pixel, perdendo informazione contestuale importante. 
+e si concentra sul singolo pixel, perdendo informazioni contestuali importanti. 
 Inoltre la combinazione pesata a livello di pixel non sfrutta la complementarità tra caratteristiche a livello di 
 patch, perciò non valorizza pienamente i punti di forza di ciascun metodo
 Un approccio migliore è basato sull'articolo 
-\textit{CrossFuse: A Novel Cross Attention Mecha-
-nism based Infrared and Visible Image Fusion Approach.} \cite{li2024crossfuse} che sfrutta tecniche basate sull'attenzione 
+\textit{CrossFuse: A Novel Cross Attention Mechanism based Infrared and Visible Image Fusion Approach.} \cite{li2024crossfuse} che sfrutta tecniche basate sull'attenzione 
 incrociata. Gli approcci basati su questa tecnica propongono esattamente questa linea di azione: 
 invece di pesare singoli pixel, si estraggono rappresentazioni (feature) dai diversi output despeckled e si usa un modulo 
 di attenzione per selezionare, a livello di feature e di contesto, quali informazioni preservare e quali attenuare. 
 Questo approccio permette di superare i limiti del pixel-per-pixel, in quanto una fusione basata su patch consente 
 di catturare informazioni contestuali e di valorizzare le relazioni strutturali presenti nell’immagine. Operando 
 su blocchi di feature e non su singoli pixel isolati, il modello è in grado di preservare meglio i bordi e le 
-discontinuità: la coerenza spaziale della patch riduce il rischio di smussare i contorni netti, tipico delle 
+discontinuità, la coerenza spaziale della patch riduce il rischio di smussare i contorni netti, tipico delle 
 fusioni locali.
