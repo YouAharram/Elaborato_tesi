@@ -90,9 +90,13 @@ e il ground truth [$\hat{I}$], ovvero l'immagine clean .
     $%
   }
 \end{equation}
+Questa funzione di perdità è stata scelta in quanto è molto facile da calcolare eccellenti 
+non presenta particolari complicazioni in fase di ottimizzazzione. Inoltre 
+dato che PSNR è funzione del MSE, ottimizzare la MSE porta anche ad avere valori 
+più alti di PSNR, che spesso viene usato come metrica di valutazione 
 
 
-\section{Metrica utilizzata per la valutazione delle immagini despeckled}
+\section{Metrica per la valutazione delle immagini despeckled}
 Per la valutazione della qualità delle immagini despeckled è stata utilizzata la metrica PSNR come indicatore.
 Il PSNR (Peak Signal-to-Noise Ratio) è una metrica usata per misurare la qualità di un’immagine ricostruita o 
 compressa rispetto a un’immagine di riferimento (ground truth). 
@@ -106,8 +110,6 @@ quelli dell’immagine degradate/ricostruita. La formuala è:
   }
 \end{equation}
 Dove $MAX_I$ è il valore massimo possibile per un pixel. Più alto è il PSNR, migliore è la qualità dell’immagine ricostruita.
-
-
 
 \section{Limiti dei questa tecnica}
 Sebbene la media pesata presenti il vantaggio di combinare in maniera coerente i contributi dei vari modelli di despeckling, 
