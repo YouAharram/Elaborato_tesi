@@ -2,7 +2,7 @@
 
 \chapter{State of the Art}
 Negli ultimi trant'anni sono stati proposti numerosi metodi per la riduzione dello speckle nelle immagini SAR.
- I primi approcci sfruttano filti spaziali come Lee, Frost e Kuan.
+ I primi approcci sfruttano filti spaziali come Lee, Frost e Kuan che sono stati confrontati nell'articolo \textit{Speckle Noise Analysis for Synthetic Aperture Radar (SAR) Space Data} \cite{r2024specklenoiseanalysissynthetic}.
 Questi operavano direttamente nel dominio dell'immagine, cioè sui pixel, sfruttando finestre locali per stimare
  statisticamente il rumore e ridurlo. Erano strumenti semplici, poco costosi dal punto 
 di vista computazionale ed efficaci ma soffrivano di un limite strutturale. Per attenuare lo speckle tendevano a 
@@ -10,7 +10,7 @@ smussare anche i dettagli fini, specialmente lungo i bordi o nelle aree eterogen
 Con lo sviluppo della teoria delle trasformate multisensoriale negli anni Novanta , si passò ad un approccio diverso. 
 Invece di agire direttamente sul'immagine, si inziò a trasformarla in un dominio 
 in cui il segnale e il rumore potessero essere seprati. Nascono così i metodi basati su trasformata, come quelli che 
-usano wavelet. Questi strumenti rappresentano un'evoluzione concettuale dei filtri spaziali,
+usano wavelet trattati nell'articolo \textit{Speckle Suppression in Ultrasonic Images Based on Undecimated Wavelets} \cite{Argenti2003}  . Questi strumenti rappresentano un'evoluzione concettuale dei filtri spaziali,
 perchè superano alcune loro debolezze: riescono a distinguere meglio il rumore dalle strutture significative, ad 
 adattarsi a diverse scale ed a preservare in maniera più accurata bordi, texture e linee sottili. 
 Tuttavia, portano con sè una maggiore complessità computazionale e la possibilità di introdurre artefatti se non 

@@ -5,7 +5,7 @@
 I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che permette
 loro di acquisire immagini della superficie terrestre indipendentemente dalle 
 condizioni meteorologiche e dalla luce solare. I satelliti SAR, grazie a questa loro 
-capacita, trovano applicazione in molteplici contesti. In ambito geologico, 
+capacita, trovano applicazione in molteplici contesti. In ambito geologico come trattato nell'articolo \textit{A spaceborne SAR-based procedure to support the detection of landslides} \cite{nhess-20-2379-2020}, 
 sono impiegati per il monitoraggio del suolo e dei processi 
 geomorfologici, consentendo la mappatura di foreste, deserti e aree soggette a 
 trasformazioni ambientali. Inoltre, risultano particolarmente efficaci nell’analisi 
@@ -25,15 +25,19 @@ segnali raccolti in posizioni diverse vengono combinati insieme. Questo processo
 simulare un'antenna molto più grande di quella reale, ottenendo così immagini ad altissima 
 risoluzione, molto piu dettagliate di quelle che un radar di dimensioni fisiche limitate potrebbe 
 generare da solo. In pratica, il movimento del satellite trasforma un radar relativamente piccolo 
-in uno strumento potentissimo per osservare il pianeta. L'immagine così generata però presenta un 
-particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
+in uno strumento potentissimo per osservare il pianeta. 
+A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
+in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
+Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine. 
+Questa tecinica è stata trattata nell'articolo \textit{A deep learning framework for matching of SAR and optical imagery} \cite{HUGHES2020166}.
+L'immagine così generata però presenta un particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
 questo non riflette semplicemente un segnale uniforme. In realtà, il segnale viene riflesso da 
 moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. Tutti questi 
 ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
 interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore del satellite o 
 del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
 che rende l'immagine difficile da interpretare ed analizzare. Il processo di riduzione dello speckle 
-prende il nome di despeckling. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
+prende il nome di despeckling tratto anche nel'articolo \textit{Speckle reducing anisotropic diffusion} \cite{1097762}. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
 però perdere le informazioni reali presenti nell'immagine. In letteratura vi sono molteplici 
 approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
 più sofisticate come statistica multivarianza o metodi di deep learning. Ogni approccio ha i suoi
