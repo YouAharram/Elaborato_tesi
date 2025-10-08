@@ -3,8 +3,11 @@
 \chapter{Introduzione}
 I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che permette
 loro di acquisire immagini della superficie terrestre indipendentemente dalle 
-condizioni meteorologiche e dalla luce solare. I satelliti SAR, grazie a questa loro 
-capacita, trovano applicazione in molteplici contesti. In ambito geologico come trattato nell'articolo \textit{A spaceborne SAR-based procedure to support the detection of landslides} \cite{nhess-20-2379-2020}, 
+condizioni meteorologiche e dalla luce solare. 
+Missioni e piattaforme di riferimento includono Sentinel-1 (ESA) \cite{esa_sentinel1}, TerraSAR-X (DLR), 
+COSMO-SkyMed (ASI), RADARSAT.
+I satelliti SAR, grazie a questa loro 
+capacita, trovano applicazione in molteplici contesti. In ambito geologico come trattato nell'articolo \cite{nhess-20-2379-2020}, 
 sono impiegati per il monitoraggio del suolo e dei processi 
 geomorfologici, consentendo la mappatura di foreste, deserti e aree soggette a 
 trasformazioni ambientali. Inoltre, risultano particolarmente efficaci nell’analisi 
@@ -17,12 +20,6 @@ ponti e ferrovie, e per l’osservazione dello sviluppo delle città. Il funzion
 di questo tipo di satellite come spiagato nel sito della \textit{N.A.S.A.} \cite{nasa_sar} si basa sull'uso di  onde radar che vengono inviate verso la Terra. 
 Questi impulsi elettromagnetici rimbalzano sul terreno e sugli 
 oggetti come edifici o vegetazione e tornano al satellite. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{utils/SARPolarization.jpg}
-    \caption{Impulsi radar inviati dal satellite SAR verso la Terra e riflessi indietro.}
-    \label{fig:sar_scatter}
-\end{figure}
 Quest'ultimo analizzando il segnale di 
 ritorno riesce ad ottenere informazioni sia sull'intensità del riflesso sia sul tempo impiegato 
 dal segnale per tornare, dati fondamentali per ricostruire l'immagine del territorio. Il punto 
@@ -34,15 +31,22 @@ generare da solo. In pratica, il movimento del satellite trasforma un radar rela
 in uno strumento potentissimo per osservare il pianeta. 
 A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
 in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
-Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine come trattato nell'articolo \textit{A deep learning framework for matching of SAR and optical imagery} \cite{HUGHES2020166}.
+Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine come trattato nell'articolo \cite{HUGHES2020166}.
 L'immagine generata dal satellite però presenta un particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
 questo non riflette semplicemente un segnale uniforme. In realtà, il segnale viene riflesso da 
-moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. Tutti questi 
-ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
+moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{utils/SARPolarization.jpg}
+    \caption{Impulsi radar inviati dal satellite SAR verso la Terra e riflessi indietro.}
+    \label{fig:sar_scatter}
+\end{figure}
+Tutti questi ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
 interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore del satellite o 
 del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
-che rende l'immagine difficile da interpretare ed analizzare. Il processo di riduzione dello speckle 
-prende il nome di despeckling tratto anche nel'articolo \textit{Speckle reducing anisotropic diffusion} \cite{1097762}. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
+che rende l'immagine difficile da interpretare ed analizzare.
+Il processo di riduzione dello speckle 
+prende il nome di despeckling tratto anche nel'articolo \cite{1097762}. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
 però perdere le informazioni reali presenti nell'immagine. In letteratura vi sono molteplici 
 approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
 più sofisticate come metodi di deep learning. Ogni approccio ha i suoi
