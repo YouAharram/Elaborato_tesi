@@ -53,6 +53,13 @@ livelli del decoder. Questi collegamenti trasferiscono mappe di feature ad alta 
 preservando l’informazione spaziale fine indispensabile per localizzare correttamente dettagli critici come bordi 
 sottili e piccole texture. Senza tali connessioni, il decoder produrrebbe output più sfocati, perdendo la capacità 
 di discriminare le aree più sensibili agli artefatti di oversmoothing o agli errori di ricostruzione.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{utils/unet.png}
+  \caption{Architettura Unet}
+  \label{fig:ArchitetturaUnet}
+\end{figure}
+
 L’aspetto più importante di questo modello è la sua capacità di andare oltre una semplice misura di errore pixel-wise. 
 La rete apprende a sviluppare una vera e propria percezione semantica dell’errore, cioè a valutare la gravità di una 
 discrepanza in funzione del contesto visivo in cui compare. Ad esempio, un errore di grande entità in una regione 
@@ -159,18 +166,30 @@ fusa, specialmente se un singolo modello viene sovrastimato in regioni dove la s
     Tennis court & 25.99 & 24.70 & 24.62 & 25.46 & 25.44 & --- \\ \hline
     \end{tabular}
   } % fine resizebox
-  \caption{Confronto dei modelli di despeckling e della loro fusione}
-  \label{tab:esempio}
-\end{table}
-
-
-    I valori sopra, indicano la media del PSNR di 100 immagini rappresentanti diversi biomi.
-    Ogni modello per la previsione della qualità, usato in TESI, 
-    è stato allenato per 3 epoche con un dataset da 30'000 
-    immagini. Come si puo notare dalla tabella [\ref{fig:MockReteNeurale}] 
-    questa tecnica di fusione non valorizza al meglio i singoli modelli 
-    portando il risultato finale ad essere peggiore di quello dei 
-    singoli modelli presi singolarmente
+  \caption{Confronto dei modelli di despeckling e della loro fusione. 
+            I valori sopra, indicano la media del PSNR di 100 immagini rappresentanti diversi biomi.
+            Ogni modello per la previsione della qualità, usato in TESI, 
+            è stato allenato per 10 epoche con un dataset da 30'000 
+            immagini. }
+  \label{tab:valoriPSNR}
+\end{table}    
+Dall’analisi dei valori di PSNR riportati in Tabella \ref{tab:valoriPSNR}, è possibile osservare che i metodi di fusione 
+MEDIA e MEDIA PESATA si comportano in modo coerente rispetto alle prestazioni dei singoli modelli di despeckling (SAR-CAM, FANS e SARBM3D). 
+In generale, i valori di MEDIA e MEDIA PESATA risultano compresi tra quelli dei tre modelli originari, come atteso da una procedura di 
+fusione. Questo comportamento indica che la combinazione delle uscite tende ad attenuare le debolezze dei singoli modelli, garantendo una 
+maggiore stabilità e robustezza complessiva del risultato.
+Nella maggior parte dei biomi considerati, la MEDIA raggiunge valori di PSNR molto vicini al modello con le migliori prestazioni, spesso SARCAM e 
+supera nettamente il modello peggiore (solitamente SARBM3D). Ciò dimostra che la fusione aritmetica costituisce una strategia efficace per 
+ottenere un risultato medio-bilanciato, in grado di avvicinarsi alla qualità del modello più performante senza sacrificare la coerenza tra le varie scene.
+Il confronto tra MEDIA e MEDIA PESATA mostra differenze minime, generalmente inferiori a 0.05 dB su tutto il dataset. Tale scostamento 
+marginale suggerisce che i pesi adottati nella media pesata non hanno inciso in modo significativo sul risultato finale, probabilmente a 
+causa di una distribuzione dei pesi simile a quella uniforme o di prestazioni già bilanciate tra i tre modelli di base.
+Nel complesso, la fusione dei risultati anche nella sua forma più semplice permette di ottenere un compromesso ottimale tra i diversi 
+approcci di despeckling, mantenendo un livello di qualità molto vicino al migliore modello individuale e al contempo più 
+stabile rispetto alle variazioni del contenuto dell’immagine. Tuttavia non riesce nella maggior parte dei casi a dare 
+risultati migliori rispetto al miglior modello.
     
+
+
 
 

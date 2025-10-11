@@ -21,8 +21,8 @@ dove $Z$ rappresenta l'immagine osservata, $X$ è l'immagine originale priva di 
 e $Y$ è la variabile casuale di speckle. Questo modello riflette la natura coerente 
 della misura del radar, in cui le ampiezze riflesse da molteplici scatterer all’interno di 
 una cella di risoluzione interferiscono tra loro producendo variazioni casuali.
-Nel caso di un'immagine \textit{multilook} (media su $L$ osservazioni indipendenti), 
-il rumore speckle $Y$ segue una \textit{distribuzione Gamma} con media unitaria:
+Nel caso di un'immagine multilook (media su $L$ osservazioni indipendenti), 
+il rumore speckle $Y$ segue una distribuzione Gamma con media unitaria:
 \begin{equation}
     \makebox[\textwidth][c]{%
       $\displaystyle
@@ -30,7 +30,7 @@ il rumore speckle $Y$ segue una \textit{distribuzione Gamma} con media unitaria:
       $%
     }
   \end{equation}
-in cui: $L$ è il numero di \emph{looks} indipendenti; $\Gamma(\cdot)$ è la funzione Gamma;
+in cui: $L$ è il numero di looks indipendenti; $\Gamma(\cdot)$ è la funzione Gamma;
 Questa scelta di modello implica che la varianza dello speckle \textbf{decresce} all'aumentare 
 del numero di looks, migliorando la radiometria a scapito della risoluzione \cite{4767223}.
 Applicando il logaritmo naturale, il modello moltiplicativo si trasforma 
@@ -51,17 +51,17 @@ Questi operavano direttamente nel dominio dell'immagine, cioè sui pixel, sfrutt
  statisticamente il rumore e ridurlo. Erano strumenti semplici, poco costosi dal punto 
 di vista computazionale ed efficaci ma soffrivano di un limite strutturale. Per attenuare lo speckle tendevano a 
 smussare anche i dettagli fini, specialmente lungo i bordi o nelle aree eterogenee. 
-Con lo sviluppo della teoria delle trasformate multisensoriale negli anni Novanta , si passò ad un approccio diverso. 
+Con lo sviluppo della teoria delle trasformate multisensoriale negli anni Novanta, si passò ad un approccio diverso. 
 Invece di agire direttamente sul'immagine, si inziò a trasformarla in un dominio 
 in cui il segnale e il rumore potessero essere seprati. Nascono così i metodi basati su trasformata, come quelli che 
-usano wavelet \cite{Argenti2003}  . Questi strumenti rappresentano un'evoluzione concettuale dei filtri spaziali,
+usano wavelet \cite{Argenti2003}. Questi strumenti rappresentano un'evoluzione concettuale dei filtri spaziali,
 perchè superano alcune loro debolezze: riescono a distinguere meglio il rumore dalle strutture significative, ad 
 adattarsi a diverse scale ed a preservare in maniera più accurata bordi, texture e linee sottili. 
 Tuttavia, portano con sè una maggiore complessità computazionale e la possibilità di introdurre artefatti se non 
 calibrati con attenzione. Infine dato che lo speckle è un rumore moltiplicativo e non semplicemente 
 additivo, se non viene trasformato prima, la wavelet può non essere del tutto efficace \cite{tutorSpeckle}.
-Negli ultimi anni, l'attenzione si è spostata ancora più avanti verso i metodi non locali, come i filtri non local means o 
-SARBM3D adattati per le immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
+Negli ultimi anni, l’attenzione si è spostata verso metodi non locali, come il filtro Non-Local Means e l’algoritmo 
+SARBM3D, adattati specificamente per il despeckling di immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
 introno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 
 corrispondenze per ridurre il rumore. In questo modo lo speckle viene attenuato in maniera molto efficace, mentre 
 i dettagli strutturali si preservao quasi intatti. La qualità delle immagini risultanti è generalmente
@@ -83,19 +83,22 @@ indipendetemente da quale esso sia, l'immagine risultante avrà aree in cui è s
 stata ripulita peggio a seconda di dove il modello per come è stato realizzato ha più facilità ad operare.
 L'idea da cui nasce questa tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
 in modo tale che l'immagine risultante rispecchi il più possibile la realtà di interesse. Questo tipo di approccio non va a 
-reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare denoising, ma è mirato
+reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare despeckling, ma è mirato
 a sfruttare i punti di forza di modelli già esistenti. Inizialmente è stata usata una tecnica naive che 
 prevede un architettura Unet per addestare tanti modelli quante sono le tecniche di despeckling 
 della quale si vuole imparare a prevedere la qualità del denoising generando così mappe di qualità 
 che determinano quanto dell'immagine denoised di un  modello prendere in relazione alla bontà del denoising.
-Questa tecnica però non sfrutta a pieno le qualità dei singoli modelli in quanto la stima della qualità è locale 
-e si concentra sul singolo pixel, perdendo informazioni contestuali importanti. 
-Inoltre la combinazione pesata a livello di pixel non sfrutta la complementarità tra caratteristiche a livello di 
-patch, perciò non valorizza pienamente i punti di forza di ciascun metodo \cite{li2024crossfuse} che sfrutta tecniche basate sull'attenzione 
-incrociata. Gli approcci basati su questa tecnica propongono esattamente questa linea di azione: 
+Tuttavia, questa tecnica non riesce a sfruttare appieno le potenzialità dei singoli modelli, poiché la stima 
+della qualità è effettuata a livello locale e si concentra sul singolo pixel, trascurando così informazioni 
+contestuali di più ampia scala. Inoltre, la combinazione pesata pixel-per-pixel non permette di cogliere la 
+complementarità delle caratteristiche tra i diversi metodi a livello di patch, limitando la capacità del 
+sistema di valorizzare i punti di forza specifici di ciascun modello. L’approccio proposto in \cite{li2024crossfuse}, invece, 
+supera tali limiti introducendo meccanismi di attenzione incrociata, che consentono una fusione più 
+coerente e informata tra le diverse rappresentazioni.
+Gli approcci basati su questa tecnica propongono esattamente questa linea di azione: 
 invece di pesare singoli pixel, si estraggono rappresentazioni (feature) dai diversi output despeckled e si usa un modulo 
 di attenzione per selezionare, a livello di feature e di contesto, quali informazioni preservare e quali attenuare. 
-Questo approccio permette di superare i limiti del pixel-per-pixel, in quanto una fusione basata su patch consente 
+Questo approccio permette di superare i limiti dell' approccio pixel per pixel, in quanto una fusione basata su patch consente 
 di catturare informazioni contestuali e di valorizzare le relazioni strutturali presenti nell’immagine. Operando 
 su blocchi di feature e non su singoli pixel isolati, il modello è in grado di preservare meglio i bordi e le 
 discontinuità, la coerenza spaziale della patch riduce il rischio di smussare i contorni netti, tipico delle 

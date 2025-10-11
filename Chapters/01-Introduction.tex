@@ -5,9 +5,9 @@ I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che perm
 loro di acquisire immagini della superficie terrestre indipendentemente dalle 
 condizioni meteorologiche e dalla luce solare. 
 Missioni e piattaforme di riferimento includono Sentinel-1 (ESA) \cite{esa_sentinel1}, TerraSAR-X (DLR), 
-COSMO-SkyMed (ASI), RADARSAT.
+COSMO-SkyMed (ASI) e RADARSAT.
 I satelliti SAR, grazie a questa loro 
-capacita, trovano applicazione in molteplici contesti. In ambito geologico come trattato nell'articolo \cite{nhess-20-2379-2020}, 
+capacita, trovano applicazione in molteplici contesti. In ambito geologico \cite{nhess-20-2379-2020}, 
 sono impiegati per il monitoraggio del suolo e dei processi 
 geomorfologici, consentendo la mappatura di foreste, deserti e aree soggette a 
 trasformazioni ambientali. Inoltre, risultano particolarmente efficaci nell’analisi 
@@ -31,7 +31,7 @@ generare da solo. In pratica, il movimento del satellite trasforma un radar rela
 in uno strumento potentissimo per osservare il pianeta. 
 A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
 in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
-Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine come trattato nell'articolo \cite{HUGHES2020166}.
+Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine \cite{HUGHES2020166}.
 L'immagine generata dal satellite però presenta un particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
 questo non riflette semplicemente un segnale uniforme. In realtà, il segnale viene riflesso da 
 moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. 
@@ -46,7 +46,7 @@ interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore d
 del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
 che rende l'immagine difficile da interpretare ed analizzare.
 Il processo di riduzione dello speckle 
-prende il nome di despeckling tratto anche nel'articolo \cite{1097762}. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
+prende il nome di despeckling \cite{1097762}. Quest'ultimo cerca di smussare o filtrare il rumore granulare senza 
 però perdere le informazioni reali presenti nell'immagine. In letteratura vi sono molteplici 
 approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
 più sofisticate come metodi di deep learning. Ogni approccio ha i suoi
@@ -62,7 +62,7 @@ in quanto la qualità del denoising viene stimata concentrandosi sul singolo pix
 guardare i vicini. Un secondo approccio più efficiente è basato sull’attenzione. Invece 
 di utilizzare mappe di qualità che determinano la bontà del denoising di un singolo 
 pixel, si utilizzano meccanismi basati sulla self e cross attention. Questo consente di andare oltre 
-la valutazione locale pixel-per-pixel, mettendo in relazione l’informazione proveniente 
+la valutazione locale pixel per pixel, mettendo in relazione l’informazione proveniente 
 da più immagini despeckled e valorizzando i dettagli complementari.
 La cross attention, infatti, nasce nel contesto della fusione multimodale di immagini 
 (ad esempio infrarosso e visibile) e mira a combinare i punti di forza di diverse fonti 
