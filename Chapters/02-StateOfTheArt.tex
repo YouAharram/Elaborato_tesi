@@ -1,50 +1,84 @@
 % !TEX root = ../Thesis.tex
-
 \chapter{State of the Art}
+Il funzionamento 
+di questo tipo di satellite come spiagato nel sito della \textit{N.A.S.A.} \cite{nasa_sar} si basa sull'uso di  onde radar che vengono inviate verso la Terra. 
+Questi impulsi elettromagnetici rimbalzano sul terreno e sugli 
+oggetti come edifici o vegetazione e tornano al satellite. 
+Quest'ultimo analizzando il segnale di 
+ritorno riesce ad ottenere informazioni sia sull'intensità del riflesso sia sul tempo impiegato 
+dal segnale per tornare, dati fondamentali per ricostruire l'immagine del territorio. Il punto 
+di forza del SAR è l'apertura sintetica. Poichè il satellite si muove lungo la sua orbita, i 
+segnali raccolti in posizioni diverse vengono combinati insieme. Questo processo permette di 
+simulare un'antenna molto più grande di quella reale, ottenendo così immagini ad altissima 
+risoluzione, molto piu dettagliate di quelle che un radar di dimensioni fisiche limitate potrebbe 
+generare da solo. In pratica, il movimento del satellite trasforma un radar relativamente piccolo 
+in uno strumento potentissimo per osservare il pianeta. 
+A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
+in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
+Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine \cite{HUGHES2020166}.
 Il fenomeno dello speckle è una caratteristica intrinseca delle immagini acquisite da sensori coerenti, 
 come i radar ad apertura sintetica (SAR), i sistemi laser o gli interferometri ottici. 
 Dal punto di vista fisico, lo speckle nasce dall’interferenza coerente tra le onde elettromagnetiche riflesse 
 da molteplici scatterer presenti all’interno di una singola cella di risoluzione del sensore. 
 Ciascuno di questi scatterer contribuisce con un segnale complesso avente ampiezza e fase proprie; 
-la somma coerente di tali contributi produce una risultante la cui ampiezza varia casualmente nel tempo e nello spazio.  
+la somma coerente di tali contributi produce una risultante la cui ampiezza varia casualmente nel tempo e nello spazio.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{utils/SARPolarization.jpg}
+  \caption{Impulsi radar inviati dal satellite SAR verso la Terra e riflessi indietro.}
+  \label{fig:sar_scatter}
+\end{figure}  
 Questo effetto di interferenza, costruttiva o distruttiva, genera un pattern granulare nell’immagine osservata, 
 noto appunto come speckle. Quest'ultimo degrada la qualità visiva e radiometrica dell’immagine, rendendo più complessa l’analisi e l’interpretazione dei dati.
-Nello speckle il dominio intensità, è formalmente espresso come:
-\[
-    \makebox[\textwidth][c]{%
-      $\displaystyle
-      Z = X \cdot Y
-      $%
-    }
-\]
-dove $Z$ rappresenta l'immagine osservata, $X$ è l'immagine originale priva di rumore, 
-e $Y$ è la variabile casuale di speckle. Questo modello riflette la natura coerente 
-della misura del radar, in cui le ampiezze riflesse da molteplici scatterer all’interno di 
-una cella di risoluzione interferiscono tra loro producendo variazioni casuali.
-Nel caso di un'immagine multilook (media su $L$ osservazioni indipendenti), 
-il rumore speckle $Y$ segue una distribuzione Gamma con media unitaria:
+Le immagini ottenute da sistemi radar ad apertura sintetica (SAR) sono caratterizzate da un disturbo granulare denominato \emph{speckle}.  
+Questo fenomeno è intrinseco a tutti i sistemi di imaging coerente e rappresenta un rumore di natura moltiplicativa, dipendente dal segnale, che degrada l’aspetto visivo e le prestazioni dei processi automatici di analisi dell’immagine, come classificazione o rilevamento di cambiamenti.
+\section{Origine fisica dello speckle}
+Il sensore SAR emette un’onda elettromagnetica e riceve il segnale retrodiffuso da una piccola area della scena, detta \emph{cella di risoluzione}.  
+Tale cella contiene numerosi scatterer elementari, ciascuno caratterizzato da una propria ampiezza $A_i$ e fase $\phi_i$.  
+Il segnale complesso ricevuto può essere modellato come somma coerente dei contributi di tutti gli scatterer presenti nella cella \cite{6616053}:
 \begin{equation}
-    \makebox[\textwidth][c]{%
-      $\displaystyle
-      p_Y(y) = \frac{L^L}{\Gamma(L)} y^{L-1} e^{-Ly}, \quad y \ge 0
-      $%
-    }
-  \end{equation}
-in cui: $L$ è il numero di looks indipendenti; $\Gamma(\cdot)$ è la funzione Gamma;
-Questa scelta di modello implica che la varianza dello speckle \textbf{decresce} all'aumentare 
-del numero di looks, migliorando la radiometria a scapito della risoluzione \cite{4767223}.
-Applicando il logaritmo naturale, il modello moltiplicativo si trasforma 
-in un modello additivo
-\[
-    \makebox[\textwidth][c]{%
-      $\displaystyle
-      \ln(Z) = \ln(X) + ln(Y)
-      $%
-    }
-\]
-dove $\ln(Y)$ rappresenta un rumore additivo con distribuzione derivata da quella Gamma. 
-Questo modello è particolarmente utile nei metodi di filtraggio o stima statistica 
-che assumono rumori additivi \cite{tutorSpeckle}. 
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+      z = \sum_{i=1}^{N} A_i e^{j \phi_i}.
+    $%
+  }
+\end{equation}
+Le fasi $\phi_i$ variano casualmente a causa delle differenze di cammino ottico e, per un numero sufficientemente grande di scatterer indipendenti, il teorema del limite centrale implica che le componenti reale e immaginaria di $z$ sono variabili gaussiane a media nulla e varianza $\sigma^2 / 2$.  
+In tal caso, si parla di \emph{speckle pienamente sviluppato} (\emph{fully developed speckle}).
+\section{Modello statistico}
+Il modulo del segnale complesso $A = |z|$ segue una distribuzione di Rayleigh:
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+    p_A(A) = \frac{A}{\sigma^2} e^{-A^2 / (2\sigma^2)},
+    $%
+  }
+\end{equation}
+mentre l’intensità $I = A^2$ segue una distribuzione esponenziale:
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+    p_I(I) = \frac{1}{\sigma^2} e^{-I / \sigma^2}.
+    $%
+  }
+\end{equation}
+Il valore medio dell’intensità è $\mathbb{E}[I] = \sigma^2$, che rappresenta la \emph{riflettività media} del bersaglio o \emph{Radar Cross Section} (RCS).  
+Si ottiene così il cosiddetto \emph{modello moltiplicativo} del rumore:
+\begin{equation}
+  \makebox[\textwidth][c]{%
+    $\displaystyle
+    I = \mu \, u,
+    $%
+  }
+\end{equation}
+dove $\mu$ è la riflettività media (informazione utile) e $u$ è una variabile casuale esponenziale a media unitaria che rappresenta il rumore speckle.  
+La varianza di $I$ è proporzionale al quadrato della media, quindi i pixel più luminosi sono affetti da un disturbo più forte.
+Per ridurre la varianza, si può effettuare una media su $L$ osservazioni indipendenti (tecnica detta \emph{multilooking}), ottenendo una distribuzione $\mathcal{C}$ per l’intensità media $I_L$, con varianza ridotta a $\sigma^2 / L$.
+\section{Effetti e problematiche}
+Lo speckle riduce il rapporto segnale/rumore (SNR) e ostacola l’estrazione di informazioni affidabili da immagini SAR.  
+Inoltre, poiché la sua intensità è proporzionale al segnale stesso, il rumore è più evidente nelle aree ad alta riflettività.  
+La sua natura coerente e moltiplicativa richiede quindi modelli e tecniche di riduzione specifiche, diverse dai filtri per rumore additivo.
+\section{Tecniche di despeckling}
 Negli ultimi trant'anni sono stati proposti numerosi metodi per la riduzione dello speckle nelle immagini SAR.
  I primi approcci sfruttano filti spaziali come Lee, Frost e Kuan \cite{r2024specklenoiseanalysissynthetic}.
 Questi operavano direttamente nel dominio dell'immagine, cioè sui pixel, sfruttando finestre locali per stimare
@@ -59,7 +93,7 @@ perchè superano alcune loro debolezze: riescono a distinguere meglio il rumore 
 adattarsi a diverse scale ed a preservare in maniera più accurata bordi, texture e linee sottili. 
 Tuttavia, portano con sè una maggiore complessità computazionale e la possibilità di introdurre artefatti se non 
 calibrati con attenzione. Infine dato che lo speckle è un rumore moltiplicativo e non semplicemente 
-additivo, se non viene trasformato prima, la wavelet può non essere del tutto efficace \cite{tutorSpeckle}.
+additivo, se non viene trasformato prima, la wavelet può non essere del tutto efficace \cite{6616053}.
 Negli ultimi anni, l’attenzione si è spostata verso metodi non locali, come il filtro Non-Local Means e l’algoritmo 
 SARBM3D, adattati specificamente per il despeckling di immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
 introno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 

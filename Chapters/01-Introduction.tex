@@ -16,31 +16,10 @@ copertura boschiva. Marittimo, permettono di localizzare navi anche in condizion
 meteorologiche avverse e di rilevare sversamenti di petrolio o altre sostanze 
 inquinanti. Infrastrutture e urbanistica, vengono utilizzati per misurare gli 
 spostamenti del terreno e delle aree urbane, oltre che per il controllo di dighe, 
-ponti e ferrovie, e per l’osservazione dello sviluppo delle città. Il funzionamento 
-di questo tipo di satellite come spiagato nel sito della \textit{N.A.S.A.} \cite{nasa_sar} si basa sull'uso di  onde radar che vengono inviate verso la Terra. 
-Questi impulsi elettromagnetici rimbalzano sul terreno e sugli 
-oggetti come edifici o vegetazione e tornano al satellite. 
-Quest'ultimo analizzando il segnale di 
-ritorno riesce ad ottenere informazioni sia sull'intensità del riflesso sia sul tempo impiegato 
-dal segnale per tornare, dati fondamentali per ricostruire l'immagine del territorio. Il punto 
-di forza del SAR è l'apertura sintetica. Poichè il satellite si muove lungo la sua orbita, i 
-segnali raccolti in posizioni diverse vengono combinati insieme. Questo processo permette di 
-simulare un'antenna molto più grande di quella reale, ottenendo così immagini ad altissima 
-risoluzione, molto piu dettagliate di quelle che un radar di dimensioni fisiche limitate potrebbe 
-generare da solo. In pratica, il movimento del satellite trasforma un radar relativamente piccolo 
-in uno strumento potentissimo per osservare il pianeta. 
-A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
-in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
-Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine \cite{HUGHES2020166}.
+ponti e ferrovie, e per l’osservazione dello sviluppo delle città. 
 L'immagine generata dal satellite però presenta un particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
 questo non riflette semplicemente un segnale uniforme. In realtà, il segnale viene riflesso da 
 moltissimi piccoli scatter presenti sulla superficie come foglie, rocce o edifici. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{utils/SARPolarization.jpg}
-    \caption{Impulsi radar inviati dal satellite SAR verso la Terra e riflessi indietro.}
-    \label{fig:sar_scatter}
-\end{figure}
 Tutti questi ritorni interferiscono tra di loro, sommando le onde con fasi diverse. Il risultato di questa 
 interferenza prende il nome di Speckle. Questo tipo di rumore non è un errore del satellite o 
 del radar, ma una caratteristica intrinseca del tipo di misura e si presenta con un pattern granuloso
