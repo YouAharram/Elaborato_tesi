@@ -16,6 +16,7 @@ in uno strumento potentissimo per osservare il pianeta.
 A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
 in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
 Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine \cite{HUGHES2020166}.
+L'immagine generata dal satellite però presenta un rumore che prende il nome di speckle.   
 Il fenomeno dello speckle è una caratteristica intrinseca delle immagini acquisite da sensori coerenti, 
 come i radar ad apertura sintetica (SAR), i sistemi laser o gli interferometri ottici. 
 Dal punto di vista fisico, lo speckle nasce dall’interferenza coerente tra le onde elettromagnetiche riflesse 
@@ -30,7 +31,7 @@ la somma coerente di tali contributi produce una risultante la cui ampiezza vari
 \end{figure}  
 Questo effetto di interferenza, costruttiva o distruttiva, genera un pattern granulare nell’immagine osservata, 
 noto appunto come speckle. Quest'ultimo degrada la qualità visiva e radiometrica dell’immagine, rendendo più complessa l’analisi e l’interpretazione dei dati.
-Le immagini ottenute da sistemi radar ad apertura sintetica (SAR) sono caratterizzate da un disturbo granulare denominato \emph{speckle}.  
+Le immagini ottenute da sistemi radar ad apertura sintetica (SAR) sono caratterizzate da un disturbo granulare denominato speckle.  
 Questo fenomeno è intrinseco a tutti i sistemi di imaging coerente e rappresenta un rumore di natura moltiplicativa, dipendente dal segnale, che degrada l’aspetto visivo e le prestazioni dei processi automatici di analisi dell’immagine, come classificazione o rilevamento di cambiamenti.
 \section{Origine fisica dello speckle}
 Il sensore SAR emette un’onda elettromagnetica e riceve il segnale retrodiffuso da una piccola area della scena, detta \emph{cella di risoluzione}.  
@@ -50,7 +51,7 @@ Il modulo del segnale complesso $A = |z|$ segue una distribuzione di Rayleigh:
 \begin{equation}
   \makebox[\textwidth][c]{%
     $\displaystyle
-    p_A(A) = \frac{A}{\sigma^2} e^{-A^2 / (2\sigma^2)},
+    p_A(A) = \frac{A}{\sigma^2} e^{-A^2 / (2\sigma^2)}
     $%
   }
 \end{equation}
@@ -58,16 +59,16 @@ mentre l’intensità $I = A^2$ segue una distribuzione esponenziale:
 \begin{equation}
   \makebox[\textwidth][c]{%
     $\displaystyle
-    p_I(I) = \frac{1}{\sigma^2} e^{-I / \sigma^2}.
+    p_I(I) = \frac{1}{\sigma^2} e^{-I / \sigma^2}
     $%
   }
 \end{equation}
-Il valore medio dell’intensità è $\mathbb{E}[I] = \sigma^2$, che rappresenta la \emph{riflettività media} del bersaglio o \emph{Radar Cross Section} (RCS).  
-Si ottiene così il cosiddetto \emph{modello moltiplicativo} del rumore:
+Il valore medio dell’intensità è $\mathbb{E}[I] = \sigma^2$, che rappresenta la riflettività media del bersaglio o Radar Cross Section (RCS).  
+Si ottiene così il cosiddetto modello moltiplicativo del rumore:
 \begin{equation}
   \makebox[\textwidth][c]{%
     $\displaystyle
-    I = \mu \, u,
+    I = \mu \, u
     $%
   }
 \end{equation}
@@ -75,7 +76,7 @@ dove $\mu$ è la riflettività media (informazione utile) e $u$ è una variabile
 La varianza di $I$ è proporzionale al quadrato della media, quindi i pixel più luminosi sono affetti da un disturbo più forte.
 Per ridurre la varianza, si può effettuare una media su $L$ osservazioni indipendenti (tecnica detta \emph{multilooking}), ottenendo una distribuzione $\mathcal{C}$ per l’intensità media $I_L$, con varianza ridotta a $\sigma^2 / L$.
 \section{Effetti e problematiche}
-Lo speckle riduce il rapporto segnale/rumore (SNR) e ostacola l’estrazione di informazioni affidabili da immagini SAR.  
+Lo speckle riduce il rapporto segnale rumore (SNR) e ostacola l’estrazione di informazioni affidabili da immagini SAR.  
 Inoltre, poiché la sua intensità è proporzionale al segnale stesso, il rumore è più evidente nelle aree ad alta riflettività.  
 La sua natura coerente e moltiplicativa richiede quindi modelli e tecniche di riduzione specifiche, diverse dai filtri per rumore additivo.
 \section{Tecniche di despeckling}
