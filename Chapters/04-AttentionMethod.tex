@@ -145,12 +145,12 @@ gerarchico, ad esempio con una attention aggregation layer, che raccoglie i risu
 li integra progressivamente. In questo modo si costruisce un’unica mappa di caratteristiche latenti che racchiude i dettagli fini dei vari modelli, 
 e riduce al minimo la ridondanza informativa.
 Il decoder, a questo punto, ha il compito di ricostruire l’immagine finale partendo da questa rappresentazione fusa. 
+Dal punto di vista concettuale, questa architettura si comporta come un “mediatore intelligente” tra diverse visioni dello stesso segnale: non 
+sceglie a priori quale metodo di despeckling sia migliore, ma apprende a ponderare dinamicamente l’informazione proveniente da ciascuno in base 
+alla sua unicità. La cross-attention, con la re-softmax, garantisce che il modello privilegi la diversità informativa invece della somiglianza, 
+rendendo possibile una fusione realmente complementare e non una semplice media delle soluzioni.
 
 Il risultato è [DA CAPIRE] 
 %un’immagine finale che bilancia la nitidezza e la naturalezza visiva: le aree uniformi appaiono pulite e coerenti, 
 %mentre le regioni strutturate, come bordi o pattern, conservano il contrasto e la definizione originaria.
 
-Dal punto di vista concettuale, questa architettura si comporta come un “mediatore intelligente” tra diverse visioni dello stesso segnale: non 
-sceglie a priori quale metodo di despeckling sia migliore, ma apprende a ponderare dinamicamente l’informazione proveniente da ciascuno in base 
-alla sua unicità. La cross-attention, con la re-softmax, garantisce che il modello privilegi la diversità informativa invece della somiglianza, 
-rendendo possibile una fusione realmente complementare e non una semplice media delle soluzioni.
