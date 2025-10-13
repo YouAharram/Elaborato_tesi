@@ -5,7 +5,7 @@
 Usare un approccio basato sulla self e cross attention permette di effettuare la fusione non basandosi su una strategia 
 pixel per pixel ma su patch, ovvero 
 una piccola regione localizzata o un sottoinsieme di pixel all'interno di 
-un'immagine più grande, in genere rettangolare o quadrata. \\\\
+un'immagine più grande, in genere rettangolare o quadrata.
 L’obiettivo del meccanismo di fusione basato su self e cross attention è combinare 
 in modo intelligente più immagini despeckled provenienti da diverse acquisizioni o canali per ottenere un’immagine finale più informativa, pulita e coerente. 
 Per affrontare questa problematica, l’approccio proposto in \cite{li2024crossfuse} introduce un meccanismo di fusione basato su self e cross attention, ispirato ai modelli 
@@ -145,11 +145,11 @@ gerarchico, ad esempio con una attention aggregation layer, che raccoglie i risu
 li integra progressivamente. In questo modo si costruisce un’unica mappa di caratteristiche latenti che racchiude i dettagli fini dei vari modelli, 
 e riduce al minimo la ridondanza informativa.
 Il decoder, a questo punto, ha il compito di ricostruire l’immagine finale partendo da questa rappresentazione fusa. 
-\\\\
+
 Il risultato è [DA CAPIRE] 
 %un’immagine finale che bilancia la nitidezza e la naturalezza visiva: le aree uniformi appaiono pulite e coerenti, 
 %mentre le regioni strutturate, come bordi o pattern, conservano il contrasto e la definizione originaria.
-\\\\
+
 Dal punto di vista concettuale, questa architettura si comporta come un “mediatore intelligente” tra diverse visioni dello stesso segnale: non 
 sceglie a priori quale metodo di despeckling sia migliore, ma apprende a ponderare dinamicamente l’informazione proveniente da ciascuno in base 
 alla sua unicità. La cross-attention, con la re-softmax, garantisce che il modello privilegi la diversità informativa invece della somiglianza, 

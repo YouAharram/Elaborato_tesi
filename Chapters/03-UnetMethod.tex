@@ -101,21 +101,6 @@ non presenta particolari complicazioni in fase di ottimizzazzione. Inoltre
 dato che PSNR è funzione del MSE, ottimizzare la MSE porta anche ad avere valori 
 più alti di PSNR, che spesso viene usato come metrica di valutazione 
 
-
-\section{Metrica per la valutazione delle immagini despeckled}
-Per la valutazione della qualità delle immagini despeckled è stata utilizzata la metrica PSNR come indicatore.
-Il PSNR (Peak Signal-to-Noise Ratio) è una metrica usata per misurare la qualità di un’immagine ricostruita o 
-compressa rispetto a un’immagine di riferimento (ground truth). 
-Si basa sull’errore quadratico medio (MSE, Mean Squared Error) tra i pixel dell’immagine originale e 
-quelli dell’immagine degradate/ricostruita. La formuala è: 
-\begin{equation}
-  \makebox[\textwidth][c]{%
-    $\displaystyle
-    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
-    $%
-  }
-\end{equation}
-Dove $MAX_I$ è il valore massimo possibile per un pixel. Più alto è il PSNR, migliore è la qualità dell’immagine ricostruita.
 \section{Limiti dei questa tecnica}
 Sebbene la media pesata presenti il vantaggio di combinare in maniera coerente i contributi dei vari modelli di despeckling, 
 essa introduce alcune criticità che ne riducono l’efficacia in scenari complessi.
@@ -137,58 +122,6 @@ fusa, specialmente se un singolo modello viene sovrastimato in regioni dove la s
 
 % !TEX root = ../Thesis.tex
 
-\subsection{Tabella di confronto tramite PSNR dei vari modelli}
-\begin{table}[H] % ambiente table per inserire una didascalia
-  \centering
-  \resizebox{1.3\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
-    \begin{tabular}{|c|c|c|c|c|c|c|}
-    \hline
-    Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA & CrossFuse \\ \hline
-    Agricultural &  24.95  & 24.58  & 25.37 & 25.28 & 25.29 & --- \\ \hline
-    Airplane & 26.07 & 23.91 & 23.20 & 24.85 & 24.77 & --- \\ \hline
-    Baseball diamond & 28.50 & 27.20 & 26.87 & 27.91 & 27.90 & --- \\ \hline
-    Beach & 28.89 & 25.84 & 24.50 & 26.87 & 26.82 & --- \\ \hline
-    Buldings & 24.51 & 22.23 & 21.52 & 23.29 & 23.24 & --- \\ \hline
-    Chaparral & 22.93 & 21.49 & 22.43 & 22.60 & 22.59 & --- \\ \hline
-    Forest & 26.48 & 25.66 & 25.97 & 26.23 & 26.22 & --- \\ \hline
-    Freeway & 25.88 & 24.03 &  23.89 & 25.02 & 25.00 & --- \\ \hline
-    Golf course& 28.41 & 27.23 & 26.97 & 27.90 & 27.88 & --- \\ \hline
-    Harbor & 23.17 & 21.09 & 20.56 & 22.13 & 22.08 & --- \\ \hline
-    intersection & 24.98 & 23.51 & 23.44 & 24.36 & 24.35 & --- \\ \hline
-    mobile home park & 23.00 & 21.32 & 20.74 & 22.14 & 22.11 & --- \\ \hline
-    Overpass & 25.46 & 23.79 & 23.56 & 24.70 & 24.68 & --- \\ \hline
-    Parking lot & 22.36 & 21.01 & 20.69 & 21.72 & 21.70 & --- \\ \hline
-    River & 25.76 & 24.86 & 25.03 & 25.46 & 25.45 & --- \\ \hline
-    Runway & 27.22 & 24.88 & 24.82 & 26.19 & 26.13 & --- \\ \hline
-    Sparse residential & 25.27 & 24.01 & 24.00 & 24.76 & 24.74 & --- \\ \hline
-    Storage tanks & 25.67 & 23.63 & 22.91 & 24.57 & 24.51 & --- \\ \hline
-    Tennis court & 25.99 & 24.70 & 24.62 & 25.46 & 25.44 & --- \\ \hline
-    \end{tabular}
-  } % fine resizebox
-  \caption{Confronto dei modelli di despeckling e della loro fusione. 
-            I valori sopra, indicano la media del PSNR di 100 immagini rappresentanti diversi biomi.
-            Ogni modello per la previsione della qualità, usato in TESI, 
-            è stato allenato per 10 epoche con un dataset da 30'000 
-            immagini. }
-  \label{tab:valoriPSNR}
-\end{table}    
-Dall’analisi dei valori di PSNR riportati in Tabella \ref{tab:valoriPSNR}, è possibile osservare che i metodi di fusione 
-MEDIA e MEDIA PESATA si comportano in modo coerente rispetto alle prestazioni dei singoli modelli di despeckling (SAR-CAM, FANS e SARBM3D). 
-In generale, i valori di MEDIA e MEDIA PESATA risultano compresi tra quelli dei tre modelli originari, come atteso da una procedura di 
-fusione. Questo comportamento indica che la combinazione delle uscite tende ad attenuare le debolezze dei singoli modelli, garantendo una 
-maggiore stabilità e robustezza complessiva del risultato.
-Nella maggior parte dei biomi considerati, la MEDIA raggiunge valori di PSNR molto vicini al modello con le migliori prestazioni, spesso SARCAM e 
-supera nettamente il modello peggiore (solitamente SARBM3D). Ciò dimostra che la fusione aritmetica costituisce una strategia efficace per 
-ottenere un risultato medio-bilanciato, in grado di avvicinarsi alla qualità del modello più performante senza sacrificare la coerenza tra le varie scene.
-Il confronto tra MEDIA e MEDIA PESATA mostra differenze minime, generalmente inferiori a 0.05 dB su tutto il dataset. Tale scostamento 
-marginale suggerisce che i pesi adottati nella media pesata non hanno inciso in modo significativo sul risultato finale, probabilmente a 
-causa di una distribuzione dei pesi simile a quella uniforme o di prestazioni già bilanciate tra i tre modelli di base.
-Nel complesso, la fusione dei risultati anche nella sua forma più semplice permette di ottenere un compromesso ottimale tra i diversi 
-approcci di despeckling, mantenendo un livello di qualità molto vicino al migliore modello individuale e al contempo più 
-stabile rispetto alle variazioni del contenuto dell’immagine. Tuttavia non riesce nella maggior parte dei casi a dare 
-risultati migliori rispetto al miglior modello.
-    
 
-
-
+ 
 
