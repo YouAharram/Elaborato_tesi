@@ -38,32 +38,17 @@ Dove:
 \end{itemize}
 
 
-\subsection{Tabella di confronto tramite PSNR dei vari modelli}
+\subsection{Tabella di confronto tramite PSNR della media e media pesata}
 \begin{table}[H] % ambiente table per inserire una didascalia
   \centering
   \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
     \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
-    Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA & CrossFuse \\ \hline
-    Agricultural &  24.95  & 24.58  & 25.37 & 25.28 & 25.29 & --- \\ \hline
-    Airplane & 26.07 & 23.91 & 23.20 & 24.85 & 24.77 & --- \\ \hline
-    Baseball diamond & 28.50 & 27.20 & 26.87 & 27.91 & 27.90 & --- \\ \hline
-    Beach & 28.89 & 25.84 & 24.50 & 26.87 & 26.82 & --- \\ \hline
-    Buldings & 24.51 & 22.23 & 21.52 & 23.29 & 23.24 & --- \\ \hline
-    Chaparral & 22.93 & 21.49 & 22.43 & 22.60 & 22.59 & --- \\ \hline
-    Forest & 26.48 & 25.66 & 25.97 & 26.23 & 26.22 & --- \\ \hline
-    Freeway & 25.88 & 24.03 &  23.89 & 25.02 & 25.00 & --- \\ \hline
-    Golf course& 28.41 & 27.23 & 26.97 & 27.90 & 27.88 & --- \\ \hline
-    Harbor & 23.17 & 21.09 & 20.56 & 22.13 & 22.08 & --- \\ \hline
-    intersection & 24.98 & 23.51 & 23.44 & 24.36 & 24.35 & --- \\ \hline
-    mobile home park & 23.00 & 21.32 & 20.74 & 22.14 & 22.11 & --- \\ \hline
-    Overpass & 25.46 & 23.79 & 23.56 & 24.70 & 24.68 & --- \\ \hline
-    Parking lot & 22.36 & 21.01 & 20.69 & 21.72 & 21.70 & --- \\ \hline
-    River & 25.76 & 24.86 & 25.03 & 25.46 & 25.45 & --- \\ \hline
-    Runway & 27.22 & 24.88 & 24.82 & 26.19 & 26.13 & --- \\ \hline
-    Sparse residential & 25.27 & 24.01 & 24.00 & 24.76 & 24.74 & --- \\ \hline
-    Storage tanks & 25.67 & 23.63 & 22.91 & 24.57 & 24.51 & --- \\ \hline
-    Tennis court & 25.99 & 24.70 & 24.62 & 25.46 & 25.44 & --- \\ \hline
+    Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA \\ \hline
+    Agricultural &  24.95  & 24.58  & 25.37 & 25.28 & 25.29 \\ \hline
+    Airplane & 26.07 & 23.91 & 23.20 & 24.85 & 24.77 \\ \hline
+    Chaparral & 22.93 & 21.49 & 22.43 & 22.60 & 22.59  \\ \hline
+    Harbor & 23.17 & 21.09 & 20.56 & 22.13 & 22.08  \\ \hline
     \end{tabular}
   } % fine resizebox
   \caption{Confronto dei modelli di despeckling e della loro fusione. 
@@ -71,9 +56,9 @@ Dove:
             Ogni modello per la previsione della qualità, usato in MEDIA PESATA, 
             è stato allenato per 10 epoche con un dataset da 30'000 
             immagini. }
-  \label{tab:valoriPSNR}
+  \label{tab:valoriPSNR_MN_MP}
 \end{table}    
-Dall’analisi dei valori di PSNR riportati in Tabella \ref{tab:valoriPSNR}, è possibile osservare che i metodi di fusione 
+Dall’analisi dei valori di PSNR riportati in Tabella \ref{tab:valoriPSNR_MN_MP}, è possibile osservare che i metodi di fusione 
 MEDIA e MEDIA PESATA si comportano in modo coerente rispetto alle prestazioni dei singoli modelli di despeckling (SAR-CAM, FANS e SARBM3D). 
 In generale, i valori di MEDIA e MEDIA PESATA risultano compresi tra quelli dei tre modelli originari, come atteso da una procedura di 
 fusione. Questo comportamento indica che la combinazione delle uscite tende ad attenuare le debolezze dei singoli modelli, garantendo una 
@@ -89,16 +74,17 @@ approcci di despeckling, mantenendo un livello di qualità molto vicino al migli
 stabile rispetto alle variazioni del contenuto dell’immagine. Tuttavia non riesce nella maggior parte dei casi a dare 
 risultati migliori rispetto al miglior modello.
 
-\subsection{Tabella di confronto tramite SSIM dei vari modelli}
+\subsection{Tabella di confronto tramite SSIM della media e della media pesata}
 \begin{table}[H] % ambiente table per inserire una didascalia
     \centering
     \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
       \begin{tabular}{|c|c|c|c|c|c|c|}
       \hline
-      Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA & CrossFuse \\ \hline
-      Agricultural & 0.55 & 0.47 & 0.59 & 0.55 & 0.55 & --- \\ \hline
-      Airplane & 0.71 & 0.67 & 0.68 & 0.70 & 0.70 & --- \\ \hline
-      Buldings & 0.74 & 0.69 & 0.70 & 0.73 & 0.72 & --- \\ \hline
+      Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA \\ \hline
+      Agricultural & 0.55 & 0.47 & 0.59 & 0.55 & 0.55  \\ \hline
+      Airplane & 0.71 & 0.67 & 0.68 & 0.70 & 0.70  \\ \hline
+      Chaparral & 0.62 & 0.46 & 0.56 & 0.57 & 0.57 \\ \hline
+      Harbor & 0.81 & 0.74 & 0.74 & 0.78 & 0.78 \\ \hline
       \end{tabular}
     } % fine resizebox
     \caption{Confronto dei modelli di despeckling e della loro fusione. 
@@ -106,12 +92,46 @@ risultati migliori rispetto al miglior modello.
               Ogni modello per la previsione della qualità, usato in MEDIA PESATA, 
               è stato allenato per 10 epoche con un dataset da 30'000 
               immagini. }
-    \label{tab:valoriSSIM}
+    \label{tab:valoriSSIM_MN_MP}
   \end{table}  
-  Anche dai dati riportati nella tabella \ref{tab:valoriSSIM} si osserva come sia la MEDIA sia la MEDIA PESATA 
+  Anche dai dati riportati nella tabella \ref{tab:valoriSSIM_MN_MP} si osserva come sia la MEDIA sia la MEDIA PESATA 
   tendano a riflettere le prestazioni del modello migliore in termini di SSIM. La qualità strutturale dell’immagine 
   non risulta mai inferiore o pari a quella del modello meno performante, confermando che, sebbene questo 
   approccio non rappresenti la soluzione ottimale, costituisce comunque un buon compromesso tra i diversi modelli.
+  \subsubsection{Tabella di confronto tramite PSNR del modello crossfuse}
+  \begin{table}[H] % ambiente table per inserire una didascalia
+    \centering
+    \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
+      \begin{tabular}{|c|c|c|c|c|c|c|}
+      \hline
+      Bioma & SAR-CAM & FANS & SARBM3D & CROSSFUSE & CROSSFUSE LIGHT \\ \hline
+      Agricultural &  24.95  & 24.58  & 25.37 &  & 23.73 \\ \hline
+      Airplane & 26.07 & 23.91 & 23.20 &  & 26.48  \\ \hline
+      Chaparral & 22.93 & 21.49 & 22.43 &  &  21.90 \\ \hline
+      Harbor & 23.17 & 21.09 & 20.56 &  & 22.28 \\ \hline
+      \end{tabular}
+    } % fine resizebox
+    \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite PSNR.}
+    \label{tab:valoriPSNR_CF_TN}
+  \end{table}     
+  \subsubsection{Tabella di confronto tramite SSIM del modello crossfuse}
+  \begin{table}[H] % ambiente table per inserire una didascalia
+    \centering
+    \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
+      \begin{tabular}{|c|c|c|c|c|c|c|}
+      \hline
+      Bioma & SAR-CAM & FANS & SARBM3D & CROSSFUSE & CROSSFUSE LIGHT \\ \hline
+      Agricultural & 0.55 & 0.47 & 0.59 & 0.38 &  0.54 \\ \hline
+      Airplane & 0.71 & 0.67 & 0.68 & 0.45 & 0.70  \\ \hline
+      Chaparral & 0.62 & 0.46 & 0.56 & 0.48 & 0.62 \\ \hline
+      Harbor & 0.81 & 0.74 & 0.74 & 0.64 & 0.78 \\ \hline
+      \end{tabular}
+    } % fine resizebox
+    \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite SSIM.}
+    \label{tab:valoriSSIM_MN_MP}
+  \end{table}     
+  QUI METTERE LE CONSIDERAZIONI UNA VOLTA VISTI I RISULTATI  
+
   \subsection{Confronto visivo dei vari modelli}
   \subsubsection{Media pesata}
   \begin{figure}[H]
@@ -133,5 +153,7 @@ peggio del modello meno efficace.
     \caption{}
     \label{fig:airplane00MN}
   \end{figure}
-Queste immagini ci danno la prova visiva di quello che abbiamo visto con le metriche PSNR e SSIM, 
-ovvero che la media aritmetica si comporta in modo molto simile alla media pesata.
+  Queste immagini ci danno la prova visiva di quanto già osservato attraverso le metriche PSNR e SSIM, ovvero che 
+  la media aritmetica si comporta in modo molto simile alla media pesata. In entrambi i casi, la fusione tende a 
+  privilegiare le regioni in cui i singoli modelli hanno performato meglio, combinando in maniera efficace le 
+  loro rispettive capacità di riduzione del rumore e preservazione del dettaglio.

@@ -3,8 +3,13 @@
 \chapter{Conclusions and Future work}
 In questa tesi sono stati esplorati differenti approcci per la fusione di immagini SAR despeckled. 
 Tecniche naive come la media e la media pesata hanno mostrato comunque di avere un comportamento stabile e robusto, 
-ma d'altro canto hanno il limite di avvicinarsi sempre al modello migliore ma senza mai superarlo.
+d'altro canto hanno il limite di avvicinarsi sempre al modello migliore ma senza mai superarlo.
 Non consiglierei sviluppi futuri riguardandi questo approccio in quanto anche nel migliore dei casi non 
 si arriva alle prestazione degli altri metodi di fusione più avanzati.
 \\\\
-l'approccio basato sull'articolo CrossFuse è sicuramente un ottima strada da seguire per futuri sviluppi.
+l'approccio basato sull'articolo CrossFuse è sicuramente più interessante in quanto 
+presenta meccanismi più avanzati con la quale è più efficace capire dove il despeckling è avvenuto con maggiore successo.
+Consiglio di esplorare ulteriormente questo approccio in quanto sfruttare meccanismi di attention
+per la fusione di immagini despeckled è sicuramente un campo interessante e con ampi margini di miglioramento.
+Un possibile sviluppo futuro potrebbe essere quello di utlizzare altri modelli di despeckling come input, che abbiano 
+tra loro caratteristiche più diverse in modo da avere una fusione più efficace.

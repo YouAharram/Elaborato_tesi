@@ -150,7 +150,29 @@ sceglie a priori quale metodo di despeckling sia migliore, ma apprende a pondera
 alla sua unicità. La cross-attention, con la re-softmax, garantisce che il modello privilegi la diversità informativa invece della somiglianza, 
 rendendo possibile una fusione realmente complementare e non una semplice media delle soluzioni.
 
-Il risultato è [DA CAPIRE] 
-%un’immagine finale che bilancia la nitidezza e la naturalezza visiva: le aree uniformi appaiono pulite e coerenti, 
-%mentre le regioni strutturate, come bordi o pattern, conservano il contrasto e la definizione originaria.
+\section{Semplificazione del modello CrossFuse}
+Il modello CrossFuse nasce con l’obiettivo di affrontare un problema tipico della fusione multimodale tra immagini provenienti da 
+domini diversi, in particolare ottico e infrarosso. In questi casi, i due sensori catturano informazioni complementari: l’immagine 
+visibile contiene ricchezza di texture e colore, mentre quella infrarossa evidenzia le sorgenti di calore e le strutture non 
+visibili a occhio nudo. Il compito della rete è quindi combinare tali informazioni massimizzando la complementarità e 
+minimizzando la ridondanza tra le due modalità. Durante le spierimentazioni della tesi pero si è notato che,
+tuttavia, se consideriamo il caso di immagini provenienti dallo stesso dominio, come due immagini ottiche acquisite in condizioni 
+diverse o due versioni degradate di uno stesso contenuto, la situazione cambia profondamente.
+In questo scenario, le informazioni di partenza non sono complementari ma ridondanti: la sfida non è più quella di mettere in evidenza 
+le differenze tra domini, ma piuttosto di fondere in modo coerente informazioni simili, eliminando il rumore e preservando i dettagli condivisi.
+Di conseguenza, molti dei meccanismi complessi introdotti in CrossFuse, come la doppia attenzione incrociata, il re-softmax o la doppia fase di addestramento, 
+possono risultare superflui o addirittura controproducenti.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{utils/schema.png}
+  \caption{Schema semplificato.}
+  \label{fig:schema}
+\end{figure}
+Si parte da più immagini di input che appartengono allo stesso dominio.
+Ogni immagine viene divisa in patch e passata attraverso un Patch Embedding , poi si aggiunge un Positional Embedding per mantenere l’informazione spaziale.
+Le rappresentazioni ottenute passano attraverso una serie di blocchi di attenzione, indicati come “Self/Cross Attention” che possono modellare sia le relazioni interne all’immagine (self-attention) sia tra immagini (cross-attention).
+Infine, le feature elaborate vengono combinate in un modulo di Fusion, che produce l’immagine fusa finale.
+CrossFuse cerca l’informazione mancante nell’altro dominio, la versione semplificata cerca l’informazione comune e più stabile tra immagini simili.
+Per questo motivo, eliminare meccanismi come il re-softmax o la doppia fase di addestramento, nati per gestire la non-correlazione 
+può non solo semplificare l’architettura, ma anche migliorare le prestazioni nei contesti monomodali.
 
