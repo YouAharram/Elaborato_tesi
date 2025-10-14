@@ -1,7 +1,7 @@
 % !TEX root = ../Thesis.tex
 
 \chapter{Introduzione}
-I satelliti SAR sono satelliti dotati di un radar ad apertura sintetica che permette
+I satelliti SAR (Synthetic Aperture Radar) sono satelliti dotati di un radar ad apertura sintetica che permette
 loro di acquisire immagini della superficie terrestre indipendentemente dalle 
 condizioni meteorologiche e dalla luce solare. 
 Missioni e piattaforme di riferimento includono Sentinel-1 (ESA) \cite{esa_sentinel1}, TerraSAR-X (DLR), 
@@ -12,9 +12,9 @@ sono impiegati per il monitoraggio del suolo e dei processi
 geomorfologici, consentendo la mappatura di foreste, deserti e aree soggette a 
 trasformazioni ambientali. Inoltre, risultano particolarmente efficaci nell’analisi 
 dei fenomeni di deforestazione attraverso il rilevamento dei cambiamenti nella 
-copertura boschiva. Marittimo, permettono di localizzare navi anche in condizioni 
+copertura boschiva. In ambito marittimo \cite{ESA_TrackingMaritimeTraffic}, permettono di localizzare navi anche in condizioni 
 meteorologiche avverse e di rilevare sversamenti di petrolio o altre sostanze 
-inquinanti. Infrastrutture e urbanistica, vengono utilizzati per misurare gli 
+inquinanti. In ambito di infrastrutture e urbanistica \cite{esa_sentinel1}, vengono utilizzati per misurare gli 
 spostamenti del terreno e delle aree urbane, oltre che per il controllo di dighe, 
 ponti e ferrovie, e per l’osservazione dello sviluppo delle città. 
 L'immagine generata dal satellite però presenta un particolare tipo di rumore. Quest'ultimo si forma quando un impulso radar colpisce il terreno, 
@@ -30,8 +30,11 @@ però perdere le informazioni reali presenti nell'immagine. In letteratura vi so
 approcci: alcui si basano su filtri spaziali che analizzano i pixel vicini, altri usano tecniche 
 più sofisticate come metodi di deep learning. Ogni approccio ha i suoi
 punti di forza e le sue lacune sulla base del tipo di ambiente rappresentato nell'immagine. 
-Lo scopo di questa tesi è cercare di unire i punti di forza di alcuni modelli in modo da ottenere l’immagine
-con il despeckling più accurato possibile. Un primo approccio per ottenere ciò consiste nell' utlizzare tecniche di machine learning
+Lo scopo di questa tesi è combinare i punti di forza di diversi modelli di despeckling, 
+fondendo tra loro i risultati in modo da selezionare, per ciascuna regione dell’immagine, le parti 
+migliori di ogni output. L’obiettivo finale è ottenere un’immagine con il despeckling più accurato possibile.
+Per valutare questa ipotesi, sono stati analizzati e confrontati diversi approcci, al fine di individuare la strategia più efficace per la fusione delle immagini.
+Un primo approccio per ottenere ciò consiste nell' utlizzare tecniche di machine learning
 per predire la qualità di un immagine denoised attraverso una mappa di qualità. Ad ogni modello,
 è associata una mappa che indica, pixel per pixel dove il modello ha funzionato meglio e 
 dove invece peggio. La fusione avviene tramite la media pesata dove i relativi pesi 

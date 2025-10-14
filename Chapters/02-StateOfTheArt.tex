@@ -1,18 +1,22 @@
 % !TEX root = ../Thesis.tex
 \chapter{State of the Art}
-Il funzionamento 
-di questo tipo di satellite come spiagato nel sito della \textit{N.A.S.A.} \cite{nasa_sar} si basa sull'uso di  onde radar che vengono inviate verso la Terra. 
-Questi impulsi elettromagnetici rimbalzano sul terreno e sugli 
-oggetti come edifici o vegetazione e tornano al satellite. 
-Quest'ultimo analizzando il segnale di 
-ritorno riesce ad ottenere informazioni sia sull'intensità del riflesso sia sul tempo impiegato 
-dal segnale per tornare, dati fondamentali per ricostruire l'immagine del territorio. Il punto 
-di forza del SAR è l'apertura sintetica. Poichè il satellite si muove lungo la sua orbita, i 
-segnali raccolti in posizioni diverse vengono combinati insieme. Questo processo permette di 
-simulare un'antenna molto più grande di quella reale, ottenendo così immagini ad altissima 
-risoluzione, molto piu dettagliate di quelle che un radar di dimensioni fisiche limitate potrebbe 
-generare da solo. In pratica, il movimento del satellite trasforma un radar relativamente piccolo 
-in uno strumento potentissimo per osservare il pianeta. 
+I satelliti SAR sono piattaforme spaziali dotate di sensori radar ad apertura sintetica, 
+progettati per l’osservazione della Terra. Essi rappresentano una categoria di strumenti attivi di telerilevamento, 
+poiché trasmettono segnali elettromagnetici, tipicamente in banda microonde, verso la superficie terrestre e ne 
+registrano le riflessioni (backscatter). In questo modo generano immagini ad alta risoluzione indipendenti sia 
+dalle condizioni di illuminazione sia da quelle atmosferiche.
+Nei radar tradizionali, ottenere un’elevata risoluzione angolare richiederebbe un’antenna di grandi dimensioni, 
+difficilmente realizzabile a bordo di un satellite. Il principio di apertura sintetica consente di superare questo limite. 
+Come spiegato nel sito della NASA \cite{nasa_sar}, mentre il satellite si muove lungo la sua orbita, 
+il sistema radar emette una sequenza di impulsi elettromagnetici e riceve gli echi provenienti dalla 
+stessa area di osservazione da posizioni leggermente diverse.
+Le misurazioni così ottenute vengono successivamente combinate mediante sofisticati algoritmi di elaborazione del segnale, 
+che correggono le variazioni di fase dovute al movimento del satellite. In questo modo si simula un’antenna virtuale 
+di dimensioni molto maggiori rispetto a quella fisica, migliorando significativamente la risoluzione delle immagini.
+Il satellite, analizzando l’intensità e il tempo di ritorno del segnale riflesso, è in grado di ricostruire informazioni 
+dettagliate sulla superficie terrestre e sugli oggetti presenti come edifici, vegetazione o rilievi. Il movimento 
+orbitale del satellite, dunque, trasforma un radar di dimensioni ridotte in uno strumento estremamente potente per 
+l’osservazione del pianeta, capace di ottenere immagini ad altissima risoluzione e di grande valore scientifico.
 A seguito della cattura della scena di interesse, l’immagine ottenuta risulta disallineata, 
 in quanto si genera un angolo $\theta$ tra l’asse del satellite e la superficie terrestre. 
 Per correggere questo effetto, si applica una tecnica di allineamento dell’immagine \cite{HUGHES2020166}.
@@ -30,8 +34,7 @@ la somma coerente di tali contributi produce una risultante la cui ampiezza vari
   \label{fig:sar_scatter}
 \end{figure}  
 Questo effetto di interferenza, costruttiva o distruttiva, genera un pattern granulare nell’immagine osservata, 
-noto appunto come speckle. Quest'ultimo degrada la qualità visiva e radiometrica dell’immagine, rendendo più complessa l’analisi e l’interpretazione dei dati.
-Le immagini ottenute da sistemi radar ad apertura sintetica (SAR) sono caratterizzate da un disturbo granulare denominato speckle.  
+noto appunto come speckle. Quest'ultimo degrada la qualità visiva e radiometrica dell’immagine, rendendo più complessa l’analisi e l’interpretazione dei dati. 
 Questo fenomeno è intrinseco a tutti i sistemi di imaging coerente e rappresenta un rumore di natura moltiplicativa, dipendente dal segnale, che degrada l’aspetto visivo e le prestazioni dei processi automatici di analisi dell’immagine, come classificazione o rilevamento di cambiamenti.
 \section{Origine fisica dello speckle}
 Il sensore SAR emette un’onda elettromagnetica e riceve il segnale retrodiffuso da una piccola area della scena, detta \emph{cella di risoluzione}.  
@@ -96,14 +99,14 @@ Tuttavia, portano con sè una maggiore complessità computazionale e la possibil
 calibrati con attenzione. Infine dato che lo speckle è un rumore moltiplicativo e non semplicemente 
 additivo, se non viene trasformato prima, la wavelet può non essere del tutto efficace \cite{6616053}.
 Negli ultimi anni, l’attenzione si è spostata verso metodi non locali, come il filtro Non-Local Means e l’algoritmo 
-SARBM3D, adattati specificamente per il despeckling di immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a gurdare in un 
-introno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 
+SARBM3D, adattati specificamente per il despeckling di immagini SAR. Qui l'idea è radicalmente diversa, ovvero non ci si limita più a guardare in un 
+intorno locale del pixel, ma si cercano nel resto dell'immagine regioni simili e si usano queste 
 corrispondenze per ridurre il rumore. In questo modo lo speckle viene attenuato in maniera molto efficace, mentre 
 i dettagli strutturali si preservao quasi intatti. La qualità delle immagini risultanti è generalmente
 superiore a quella ottenuta con filtri locali o multirisoluzione, ciò comporta però un costo computazionale elevato 
 e la necessità di algoritmi sofisticati per gestire le similitudini tra regioni. Negli ultimi dieci 
 anni si è aperta una nuova fase, spinta dall'esplosione del deep learning \cite{DL_SAR}. L'idea è che le reti neurali, in 
-particolare convoluzionalil o basate su autoencoder, possano imparare direttamente dai dati le caratteristiche
+particolare convoluzionali o basate su autoencoder, possano imparare direttamente dai dati le caratteristiche
 dello speckle e il modo migliore per ridurlo. Questo approccio non si basa più nell'assumere una distribuzione 
 statistica del rumore o una struttura matematica da preservare, ma si affida alla capacità della rete di 
 apprendere autonomamente dalle coppie di immagini rumorose e pulite. I risultati hanno portato ad una qualità 
@@ -119,22 +122,4 @@ stata ripulita peggio a seconda di dove il modello per come è stato realizzato 
 L'idea da cui nasce questa tesi è quello di unire le caratteristiche migliori di determinate tecniche di despeckling, 
 in modo tale che l'immagine risultante rispecchi il più possibile la realtà di interesse. Questo tipo di approccio non va a 
 reinventare la ruota, cioè non punta a realizzare un nuovo modello con cui è possibile fare despeckling, ma è mirato
-a sfruttare i punti di forza di modelli già esistenti. Inizialmente è stata usata una tecnica naive che 
-prevede un architettura Unet per addestare tanti modelli quante sono le tecniche di despeckling 
-della quale si vuole imparare a prevedere la qualità del denoising generando così mappe di qualità 
-che determinano quanto dell'immagine denoised di un  modello prendere in relazione alla bontà del denoising.
-Tuttavia, questa tecnica non riesce a sfruttare appieno le potenzialità dei singoli modelli, poiché la stima 
-della qualità è effettuata a livello locale e si concentra sul singolo pixel, trascurando così informazioni 
-contestuali di più ampia scala. Inoltre, la combinazione pesata pixel-per-pixel non permette di cogliere la 
-complementarità delle caratteristiche tra i diversi metodi a livello di patch, limitando la capacità del 
-sistema di valorizzare i punti di forza specifici di ciascun modello. L’approccio proposto in \cite{li2024crossfuse}, invece, 
-supera tali limiti introducendo meccanismi di attenzione incrociata, che consentono una fusione più 
-coerente e informata tra le diverse rappresentazioni.
-Gli approcci basati su questa tecnica propongono esattamente questa linea di azione: 
-invece di pesare singoli pixel, si estraggono rappresentazioni (feature) dai diversi output despeckled e si usa un modulo 
-di attenzione per selezionare, a livello di feature e di contesto, quali informazioni preservare e quali attenuare. 
-Questo approccio permette di superare i limiti dell' approccio pixel per pixel, in quanto una fusione basata su patch consente 
-di catturare informazioni contestuali e di valorizzare le relazioni strutturali presenti nell’immagine. Operando 
-su blocchi di feature e non su singoli pixel isolati, il modello è in grado di preservare meglio i bordi e le 
-discontinuità, la coerenza spaziale della patch riduce il rischio di smussare i contorni netti, tipico delle 
-fusioni locali.
+a sfruttare i punti di forza di modelli già esistenti fondendo i loro risultati tramite diverse tecniche. 
