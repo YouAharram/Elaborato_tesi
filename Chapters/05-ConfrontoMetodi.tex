@@ -105,14 +105,14 @@ risultati migliori rispetto al miglior modello.
       \begin{tabular}{|c|c|c|c|c|c|c|}
       \hline
       Bioma & SAR-CAM & FANS & SARBM3D & CROSSFUSE & CROSSFUSE LIGHT \\ \hline
-      Agricultural &  24.95  & 24.58  & 25.37 &  & 23.73 \\ \hline
-      Airplane & 26.07 & 23.91 & 23.20 &  & 26.48  \\ \hline
-      Chaparral & 22.93 & 21.49 & 22.43 &  &  21.90 \\ \hline
-      Harbor & 23.17 & 21.09 & 20.56 &  & 22.28 \\ \hline
+      Agricultural &  24.95  & 24.58  & 25.37 & 19.16 & 23.73 \\ \hline
+      Airplane & 26.07 & 23.91 & 23.20 & 21.79 & 26.48  \\ \hline
+      Chaparral & 22.93 & 21.49 & 22.43 & 19.62 &  21.90 \\ \hline
+      Harbor & 23.17 & 21.09 & 20.56 & 19.82 & 22.28 \\ \hline
       \end{tabular}
     } % fine resizebox
     \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite PSNR.}
-    \label{tab:valoriPSNR_CF_TN}
+    \label{tab:valoriPSNR_CF_CFL}
   \end{table}     
   \section{Tabella di confronto tramite SSIM del modello crossfuse}
   \begin{table}[H] % ambiente table per inserire una didascalia
@@ -128,16 +128,15 @@ risultati migliori rispetto al miglior modello.
       \end{tabular}
     } % fine resizebox
     \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite SSIM.}
-    \label{tab:valoriSSIM_MN_MP}
+    \label{tab:valoriSSIM_CF_CFL}
   \end{table}     
-  QUI METTERE LE CONSIDERAZIONI UNA VOLTA VISTI I RISULTATI  
-
+  
   \section{Confronto visivo dei vari modelli}
   \subsubsection{Media pesata}
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.1\textwidth]{utils/MPairplane00.png}
-    \caption{}
+    \caption{fusione di immagini di aerei tramite media pesata}
     \label{fig:airplane00MP}
   \end{figure}
 Confrontando i singoli modelli di despeckling con il ground truth si puo notare come sia SARBM3D che FANS abbiano 
@@ -146,14 +145,74 @@ SARCAM invece preserva meglio le informazioni semantiche eseguendo un despecklin
 Nell'immagine con i tre modelli fusi tramite la media pesata notiamo che sono stati riportati gli aerei che si erano persi in FANS e SARBM3D. 
 Cio torna con l'analisi fatta con le metriche come PSNR e SSIM in cui l'immagine fusa tende sempre ad allinearsi al modello migliore senza fare mai 
 peggio del modello meno efficace.
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{utils/MPharbor03.png}
+    \caption{fusione di immagini di un molo tramite media pesata}
+    \label{fig:airplane00MP}
+  \end{figure}
+  In questo caso la fusione ha omogeneizzato i dettagli delle imbarcazioni riportando però in maniera soddisfacente le strutture sia delle 
+  navi che del molo. La texture omogenea delle imbarcazioni è dovuta al fatto che nell'output dei singoli modelli questi dettagli vengono persi. 
+  Questo ci fa capire che la fusione per avere maggiore efficacia necessita di immagini che sono tra loro complementari, ovvero di immagini 
+  che contengano informazioni diverse tra loro. 
+  
 \subsubsection{media aritmetica}
 \begin{figure}[H] 
     \centering
     \includegraphics[width=1.1\textwidth]{utils/MNairplane00.png}
-    \caption{}
+    \caption{fusione di immagini di aerei tramite media aritmetica}
     \label{fig:airplane00MN}
   \end{figure}
-  Queste immagini ci danno la prova visiva di quanto già osservato attraverso le metriche PSNR e SSIM, ovvero che 
-  la media aritmetica si comporta in modo molto simile alla media pesata. In entrambi i casi, la fusione tende a 
-  privilegiare le regioni in cui i singoli modelli hanno performato meglio, combinando in maniera efficace le 
-  loro rispettive capacità di riduzione del rumore e preservazione del dettaglio.
+  \begin{figure}[H] 
+    \centering
+    \includegraphics[width=1.0\textwidth]{utils/MNharbor03.png}
+    \caption{fusione di immagini di un molo tramite media aritmetica}
+    \label{fig:harbor03MN}
+\end{figure}
+Queste immagini rispecchiano le considerazioni fatte in \ref{tab:valoriPSNR_MN_MP} e \ref{tab:valoriSSIM_MN_MP}, ovvero che 
+come approcci tendono a comportarsi in modo simile. Infatti l'immagine fusa tramite media aritmetica presenta caratteristiche simili a quella
+fusa tramite media pesata. 
+
+\subsection{Fusione tramite Self-Attention e Cross-Attention con architettura multimodale e monomodale} 
+\begin{figure}[H] 
+  \centering
+  \includegraphics[width=1.1\textwidth]{utils/CFairplane00.png}
+  \caption{fusione di immagini di aerei tramite CrossFuse}
+  \label{fig:airplane00CF}
+\end{figure}
+Nel guardare l'immagine fusa tramite CrossFuse si può capire il perchè i valori di PSNR e SSIM siano bassi.
+L'immagine infatti presenta oltre che ai dettagli dei singoli modelli anche un pattern granuloso preso dall'immagine noisy 
+durante il processo di inferenza. Per questo fenomeno il PSNR e SSIM risultano bassi anche se l'immagine presenta molti dettagli.
+
+\begin{figure}[H] 
+  \centering
+  \includegraphics[width=1.0\textwidth]{utils/CFharbor03.png}
+  \caption{fusione di immagini di un molo tramite CrossFuse}
+  \label{fig:harbor03CF}
+\end{figure}
+In questo caso dato che l'immagine di partenza è più scura data la presenza dell'acqua, la granulosità dell'immagine CrossFuse è meno evidente.
+Ciò ci permette di apprezzare meglio le caratteristiche di questa tecnica di fusione che riesce a riportare che efficacia i dettagli presenti 
+nelle singole immagini despeckled. Anche qui avere immagini più complementari tra loro avrebbe aiutato il risultato finale. 
+
+\subsection{Fusione tramite Self-Attention e Cross-Attention con architettura monomodale semplificata}
+\begin{figure}[H] 
+  \centering
+  \includegraphics[width=1.1\textwidth]{utils/CFLairplane00.png}
+  \caption{fusione di immagini di aerei tramite architettura monomodale semplificata}
+  \label{fig:airplane00CFL}
+\end{figure}
+L’immagine fusa ottenuta con l’architettura monomodale semplificata mostra subito l’assenza del 
+pattern granuloso che era invece evidente nell’immagine prodotta da CrossFuse. Questo risultato è 
+probabilmente dovuto al fatto che l’architettura semplificata è stata progettata specificamente 
+per input monomodali, risultando più adatta a preservare la coerenza e la pulizia dell’immagine. 
+L'immagine non presentando quel pattern granuloso risulta più chiara a livello semantico ed enfatizza con 
+maggiore efficacia i dettagli presenti nei singoli modelli despeckled.
+\begin{figure}[H] 
+  \centering
+  \includegraphics[width=1.0\textwidth]{utils/CFLharbor03.png}
+  \caption{fusione di immagini di un molo tramite architettura monomodale semplificata}
+  \label{fig:harbor03CFL}
+\end{figure}In presenza di immagini più scure, il pattern granuloso risulta meno evidente; 
+tuttavia, l’architettura monomodale semplificata continua a generare immagini più pulite e
+ con dettagli più definiti rispetto a CrossFuse, poiché riesce a valorizzare meglio le 
+ caratteristiche comuni tra le immagini despeckled.

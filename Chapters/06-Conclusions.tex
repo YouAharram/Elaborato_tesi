@@ -1,15 +1,26 @@
 % !TEX root = ../Thesis.tex
 
 \chapter{Conclusions and Future work}
-In questa tesi sono stati esplorati differenti approcci per la fusione di immagini SAR despeckled. 
-Tecniche naive come la media e la media pesata hanno mostrato comunque di avere un comportamento stabile e robusto, 
-d'altro canto hanno il limite di avvicinarsi sempre al modello migliore ma senza mai superarlo.
-Non consiglierei sviluppi futuri riguardandi questo approccio in quanto anche nel migliore dei casi non 
-si arriva alle prestazione degli altri metodi di fusione più avanzati.
-\\\\
-l'approccio basato sull'articolo CrossFuse è sicuramente più interessante in quanto 
-presenta meccanismi più avanzati con la quale è più efficace capire dove il despeckling è avvenuto con maggiore successo.
-Consiglio di esplorare ulteriormente questo approccio in quanto sfruttare meccanismi di attention
-per la fusione di immagini despeckled è sicuramente un campo interessante e con ampi margini di miglioramento.
-Un possibile sviluppo futuro potrebbe essere quello di utlizzare altri modelli di despeckling come input, che abbiano 
-tra loro caratteristiche più diverse in modo da avere una fusione più efficace.
+In questa tesi sono stati esplorati diversi approcci per la fusione di immagini SAR despeckled. 
+Tecniche “naive”, come la media e la media pesata, hanno dimostrato di offrire prestazioni stabili e 
+robuste. Tuttavia, presentano il limite di avvicinarsi sempre al modello migliore senza mai superarlo. 
+Per questo motivo, non si ritiene consigliabile investire ulteriori sviluppi su questi metodi, 
+in quanto, anche nel caso ottimale, le loro prestazioni rimangono inferiori rispetto a quelle dei 
+metodi di fusione più avanzati.
+L’approccio basato sull’articolo CrossFuse risulta decisamente più interessante, poiché introduce 
+meccanismi avanzati che consentono di identificare con maggiore precisione dove il despeckling è 
+avvenuto con successo. Un possibile sviluppo futuro consiste nell’analizzare in modo approfondito 
+l’origine del pattern granuloso osservato nelle immagini fuse, al fine di eliminarlo e 
+migliorare ulteriormente la qualità complessiva delle immagini.
+Dalle sperimentazioni effettuate è emerso che utilizzare metriche come PSNR e SSIM siano 
+utili per valutare la qualità delle immagini, ma non siano sufficienti per una valutazione 
+completa. In particolare, le immagini prodotte da CrossFuse presentavano un certo grado di 
+granulosità, ma la qualità semantica restava molto vicina a quella dell’immagine clean, 
+dimostrando che la valutazione visiva rimane fondamentale.
+Per future sperimentazioni sulla fusione di immagini despeckled, si consiglia di utilizzare 
+modelli di despeckling che siano complementari tra loro e di pari livello qualitativo, 
+così da ottenere una fusione più efficace senza che un modello predomini sugli altri.
+Infine, appare promettente esplorare ulteriormente approcci basati su meccanismi di self e 
+cross attention. Sebbene queste tecniche siano ancora in fase iniziale e necessitino di 
+perfezionamenti, i risultati preliminari indicano un grande potenziale per migliorare la 
+fusione di immagini despeckled, permettendo di preservare dettagli semantici e ridurre artefatti indesiderati.

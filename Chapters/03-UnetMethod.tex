@@ -4,20 +4,20 @@
 Per la fusione delle immagini denoised prodotte da differenti modelli di despeckling sono state esplorate varie strategie.
 In una fase iniziale è stata adottata una tecnica naive, basata su un’architettura U-Net, in cui vengono addestrati 
 tanti modelli quanti sono i metodi di despeckling considerati.
-Ciascun modello ha il compito di apprendere a prevedere la qualità del proprio output denoised, generando così mappe 
+Ciascun modello ha il compito di imparare a prevedere la qualità del proprio output denoised, generando così mappe 
 di qualità che indicano, per ogni regione dell’immagine, quanto contributo includere da ciascun modello in 
 base alla bontà del risultato ottenuto.
 Per valutare l’efficacia di questa strategia, i risultati ottenuti sono stati confrontati con quelli derivanti 
 da una fusione mediante semplice media aritmetica tra le immagini denoised, al fine di verificare se 
 la previsione della qualità apportasse un reale miglioramento alla qualità visiva e strutturale dell’immagine finale.
-L’approccio proposto in \cite{li2024crossfuse} introduce meccanismi di attenzione incrociata (cross-attention), 
-che consentono una fusione più coerente e informata tra le diverse rappresentazioni delle immagini.
-A differenza delle tecniche tradizionali, che attribuiscono pesi ai singoli pixel, questi metodi prevedono 
+L’approccio proposto in \cite{li2024crossfuse} introduce meccanismi di self e cross attention, 
+che consentono una fusione più coerente, sfruttando in maniera diversa le rappresentazioni delle immagini che vogliamo fondere.
+A differenza della tecnica precedente, che attribuisce dei pesi ai singoli pixel, questo metodo prevede 
 l’estrazione di feature dai vari output despeckled e l’impiego di un modulo di attenzione per selezionare, 
 a livello di caratteristiche e di contesto, quali informazioni mantenere e quali attenuare.
-Tale metodologia è stata originariamente concepita per la fusione di dati provenienti da domini eterogenei, 
+Tale metodologia in \cite{li2024crossfuse} è stata originariamente concepita per la fusione di immagini provenienti da domini eterogenei, 
 come immagini ottiche e infrarosse, e include meccanismi per enfatizzare i dettagli complementari tra i diversi input.
-L’approccio basato su patch consente di superare i limiti delle fusioni pixel-wise, poiché permette di catturare informazioni 
+L’approccio basato su patch consente di avere una visione di insieme più soddifacente rispetto all'approccio pixel-wise, poiché permette di catturare informazioni 
 contestuali e di valorizzare le relazioni strutturali presenti nell’immagine.
 Operando su blocchi di feature piuttosto che su pixel isolati, il modello è in grado di preservare meglio i bordi e le 
 discontinuità, garantendo una maggiore coerenza spaziale e riducendo il rischio di smussare i contorni netti.
@@ -26,8 +26,8 @@ e specifico per il dominio SAR.
 In questo caso, il modello prende in input esclusivamente immagini appartenenti allo stesso dominio, concentrandosi 
 non più sull’enfatizzazione delle caratteristiche complementari, ma sull’estrazione e valorizzazione 
 delle caratteristiche comuni tra i diversi output denoised.
-Questa scelta riduce la complessità architetturale e rende la fusione più efficace e coerente con l’obiettivo del 
-lavoro, ossia migliorare la qualità complessiva dell’immagine despeckled nel contesto SAR.
+Questa scelta riduce la complessità architetturale e rende la fusione più efficace e coerente con l’obiettivo perseguito, 
+ossia migliorare la qualità complessiva dell’immagine despeckled nel contesto SAR.
 
 
 \section{Dataset}
@@ -35,9 +35,9 @@ lavoro, ossia migliorare la qualità complessiva dell’immagine despeckled nel 
 Come illustrato in Figura \ref{fig:MockReteNeurale}, il dataset impiegato è costituito da tre tipologie di 
 immagini: clean, noisy e denoised tutte e tre ad un canale, ovvero in scala di grigi. Queste immagini sono state realizzate tramite uno strumento ottico di un
 satellite per poi essere sporcate con speckle artificiale e su cui infine è stato fatto denoising. Questa scelta è stata fatta 
-per poter avere sia l'immagine clean che quella noisy, fondamentali per gli eddestramenti supervisionati. Inoltre 
+per poter avere sia l'immagine clean che quella noisy, fondamentali per gli addestramenti supervisionati. Inoltre 
 risulta difficile reperire un dataset contenenti immagini SAR comprese di ground truth abbastanza grandi da poter essere utlizzati per 
-addestrare una rete neurale. Le immagini su cui viene fatto l'addestramento sono relative ad un singolo modello di despeckling ed ad 
+addestrare una rete neurale supervisionata. Le immagini su cui viene fatto l'addestramento sono relative ad un singolo modello di despeckling ed ad 
 un determinato look. Quest'ultimo è una metrica che indica l'intensità dello speckle artificiale, in quanto a più look,
 corrispondono più catture di quella che è la realtà di interesse e quindi si ha una maggior precisione e uno speckle ridotto.
 
@@ -67,7 +67,7 @@ prevedere la qualità del denoising relative ad un dato modello di despeckling e
 
 \section{Architettura rete neurale}
 Come architettura della rete neurale è stata utilizzata la Unet. Questo perchè risulta particolarmente adatto per la 
-generazione di una mappa di qualità che valuti l'affidabilità di un'immagine sottoposta a denoising \cite{Vyver2025}. che trattano dell'argomento. Il compito di 
+generazione di una mappa di qualità che valuti l'affidabilità di un'immagine sottoposta a denoising \cite{Vyver2025}. Il compito di 
 questa rete è assegnare a ciascun pixel un valore compreso nell'intervallo $[0,1]$ che ne rappresenti la 
 qualità locale. Questo output per la sua natura richiede un'architettura in grado di produrre una mappa di densità 
 della stessa risoluzione spaziale dell'input, preservando la localizzazione precise delle informazioni. 
@@ -116,7 +116,7 @@ La fusione pesata permette di prendere il meglio di ogni modello usando di più 
 caratteristica dell'immagine, e meno i suoi contributi peggiori.
 \\\\
 \section{Funzione di loss}
-Come funzione di perdità è stata utilizzata la mean square error [MSE] tra l'output della fusione [I] 
+Come funzione di loss è stata utilizzata la mean square error [MSE] tra l'output della fusione [I] 
 e il ground truth [$\hat{I}$], ovvero l'immagine clean . 
 \begin{equation}
   \makebox[\textwidth][c]{%
@@ -162,13 +162,13 @@ In \cite{li2024crossfuse} mostra che una
 fusione che usa blocchi di self-attention per rinforzare le caratteristiche intra-modalità  
 e una cross-attention progettata per esaltare le informazioni non correlate tra le modalità, produce immagini 
 fuse con più dettaglio e con meno artefatti, migliorando le strutture rispetto a metodi più semplici. 
-Il paper sottolinea inoltre che, in multimodal fusion, la cosa cruciale è valorizzare l’uncorrelation (cioè la complementarità) tra le modalità, 
-cosa che la cross-attention è progettata per fare. Questo permette di combinare 
+In \cite{li2024crossfuse} si sottolinea inoltre che, nella fusione multimodale, la cosa cruciale è valorizzare l’uncorrelation (cioè la complementarità) tra le modalità, 
+cosa che la cross-attention è progettata per fare insieme ad altre tecniche come la CAM. Questo permette di combinare 
 informazioni provenienti da regioni diverse e di differenti modalità, non solo di sommare pixel con pesi locali. 
 Il metodo si fonda su una architettura ibrida composta da due blocchi principali.
 
 \subsection{Self-Attention e Cross-Attention}
-La self-attention è un meccanismo introdotto originariamente nei Transformer per consentire a 
+Come riportato in \cite{vaswani2023attentionneed}, la self-attention è un meccanismo introdotto originariamente nei Transformer per consentire a 
 una rete di mettere in relazione diverse parti dello stesso input tra loro, pesandole in base alla loro importanza reciproca.
 Questo è diverso dalle convoluzioni (CNN) tradizionali, che analizzano solo piccole regioni locali, la self-attention, invece, 
 cattura dipendenze globali, anche tra punti molto distanti dell’immagine. La cross-attention \cite{vaswani2023attentionneed} invece 
@@ -303,21 +303,22 @@ Il modello CrossFuse nasce con l’obiettivo di affrontare un problema tipico de
 domini diversi, in particolare ottico e infrarosso. In questi casi, i due sensori catturano informazioni complementari: l’immagine 
 visibile contiene ricchezza di texture e colore, mentre quella infrarossa evidenzia le sorgenti di calore e le strutture non 
 visibili a occhio nudo. Il compito della rete è quindi combinare tali informazioni massimizzando la complementarità e 
-minimizzando la ridondanza tra le due modalità. Durante le spierimentazioni della tesi pero si è notato che,
+minimizzando la ridondanza tra le due modalità. Durante le spierimentazioni della tesi però si è notato che,
 tuttavia, se consideriamo il caso di immagini provenienti dallo stesso dominio, come due immagini ottiche acquisite in condizioni 
 diverse o due versioni degradate di uno stesso contenuto, la situazione cambia profondamente.
 In questo scenario, le informazioni di partenza non sono complementari ma ridondanti: la sfida non è più quella di mettere in evidenza 
 le differenze tra domini, ma piuttosto di fondere in modo coerente informazioni simili, eliminando il rumore e preservando i dettagli condivisi.
-Di conseguenza, molti dei meccanismi complessi introdotti in CrossFuse, come la doppia attenzione incrociata, il re-softmax o la doppia fase di addestramento, 
+Di conseguenza, molti dei meccanismi complessi introdotti in CrossFuse, come la doppia attenzione incrociata, re-softmax o la doppia fase di addestramento, 
 possono risultare superflui o addirittura controproducenti.
+\subsection{Architettura semplificata}
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{utils/schema.png}
-  \caption{Schema semplificato.}
+  \caption{Schema semplificato con input appartenenti allo stesso dominio che enfatizza le caratteristiche comuni tra le immagini} 
   \label{fig:schema}
 \end{figure}
 Si parte da più immagini di input che appartengono allo stesso dominio.
-Ogni immagine viene divisa in patch e passata attraverso un Patch Embedding , poi si aggiunge un Positional Embedding per mantenere l’informazione spaziale.
+Ogni immagine viene divisa in patch e passata attraverso un Patch Embedding, poi si aggiunge un positional embedding per mantenere l’informazione spaziale.
 Le rappresentazioni ottenute passano attraverso una serie di blocchi di attenzione, indicati come “Self/Cross Attention” che possono modellare sia le relazioni interne all’immagine (self-attention) sia tra immagini (cross-attention).
 Infine, le feature elaborate vengono combinate in un modulo di Fusion, che produce l’immagine fusa finale.
 CrossFuse cerca l’informazione mancante nell’altro dominio, la versione semplificata cerca l’informazione comune e più stabile tra immagini simili.
