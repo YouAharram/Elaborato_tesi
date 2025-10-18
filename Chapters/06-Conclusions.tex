@@ -1,25 +1,26 @@
 % !TEX root = ../Thesis.tex
 
-\chapter{Conclusions and Future work}
+\chapter{Conclusioni e sviluppi futuri}
 In questa tesi sono stati esplorati diversi approcci per la fusione di immagini SAR despeckled. 
 Tecniche “naive”, come la media e la media pesata, hanno dimostrato di offrire prestazioni stabili e 
 robuste. Tuttavia, presentano il limite di avvicinarsi sempre al modello migliore senza mai superarlo. 
 Per questo motivo, non si ritiene consigliabile investire ulteriori sviluppi su questi metodi, 
 in quanto, anche nel caso ottimale, le loro prestazioni rimangono inferiori rispetto a quelle dei 
 metodi di fusione più avanzati.
-L’approccio basato sull’articolo CrossFuse risulta decisamente più interessante, poiché introduce 
-meccanismi avanzati che consentono di identificare con maggiore precisione dove il despeckling è 
-avvenuto con successo. Un possibile sviluppo futuro consiste nell’analizzare in modo approfondito 
-l’origine del pattern granuloso osservato nelle immagini fuse, al fine di eliminarlo e 
-migliorare ulteriormente la qualità complessiva delle immagini.
+L’approccio basato sull’articolo CrossFuse risulta decisamente più interessante, 
+essendo in teoria in grado di catturare le relazioni che intercorrono tra i diversi algoritmi di 
+despeckling.
 Dalle sperimentazioni effettuate è emerso che utilizzare metriche come PSNR e SSIM siano 
 utili per valutare la qualità delle immagini, ma non siano sufficienti per una valutazione 
 completa. In particolare, le immagini prodotte da CrossFuse presentavano un certo grado di 
 granulosità, ma la qualità semantica restava molto vicina a quella dell’immagine clean, 
 dimostrando che la valutazione visiva rimane fondamentale.
+Un possibile sviluppo futuro consiste nell’analizzare in modo approfondito 
+l’origine del pattern granuloso osservato nelle immagini fuse, al fine di eliminarlo e 
+migliorare ulteriormente la qualità complessiva delle immagini.
 Per future sperimentazioni sulla fusione di immagini despeckled, si consiglia di utilizzare 
 modelli di despeckling che siano complementari tra loro e di pari livello qualitativo, 
-così da ottenere una fusione più efficace senza che un modello predomini sugli altri.
+così da ottenere una fusione più efficace senza che un modello che predomini sugli altri.
 Infine, appare promettente esplorare ulteriormente approcci basati su meccanismi di self e 
 cross attention. Sebbene queste tecniche siano ancora in fase iniziale e necessitino di 
 perfezionamenti, i risultati preliminari indicano un grande potenziale per migliorare la 

@@ -58,6 +58,25 @@ Dove:
             immagini. }
   \label{tab:valoriPSNR_MN_MP}
 \end{table}    
+\begin{table}[H] % ambiente table per inserire una didascalia
+  \centering
+  \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA \\ \hline
+    Agricultural & 0.55 & 0.47 & 0.59 & 0.55 & 0.55  \\ \hline
+    Airplane & 0.71 & 0.67 & 0.68 & 0.70 & 0.70  \\ \hline
+    Chaparral & 0.62 & 0.46 & 0.56 & 0.57 & 0.57 \\ \hline
+    Harbor & 0.81 & 0.74 & 0.74 & 0.78 & 0.78 \\ \hline
+    \end{tabular}
+  } % fine resizebox
+  \caption{Confronto dei modelli di despeckling e della loro fusione. 
+            I valori sopra, indicano la media del SSIM di 100 immagini rappresentanti diversi biomi.
+            Ogni modello per la previsione della qualità, usato in MEDIA PESATA, 
+            è stato allenato per 10 epoche con un dataset da 30'000 
+            immagini. }
+  \label{tab:valoriSSIM_MN_MP}
+\end{table}  
 Dall’analisi dei valori di PSNR riportati in Tabella \ref{tab:valoriPSNR_MN_MP}, è possibile osservare che i metodi di fusione 
 MEDIA e MEDIA PESATA si comportano in modo coerente rispetto alle prestazioni dei singoli modelli di despeckling (SAR-CAM, FANS e SARBM3D). 
 In generale, i valori di MEDIA e MEDIA PESATA risultano compresi tra quelli dei tre modelli originari, come atteso da una procedura di 
@@ -69,35 +88,14 @@ ottenere un risultato medio-bilanciato, in grado di avvicinarsi alla qualità de
 Il confronto tra MEDIA e MEDIA PESATA mostra differenze minime, generalmente inferiori a 0.05 dB su tutto il dataset. Tale scostamento 
 marginale suggerisce che i pesi adottati nella media pesata non hanno inciso in modo significativo sul risultato finale, probabilmente a 
 causa di una distribuzione dei pesi simile a quella uniforme o di prestazioni già bilanciate tra i tre modelli di base.
-Nel complesso, la fusione dei risultati anche nella sua forma più semplice permette di ottenere un compromesso ottimale tra i diversi 
+Nel complesso, la fusione dei risultati anche nella sua forma più semplice permette di ottenere un buon compromesso tra i diversi 
 approcci di despeckling, mantenendo un livello di qualità molto vicino al migliore modello individuale e al contempo più 
 stabile rispetto alle variazioni del contenuto dell’immagine. Tuttavia non riesce nella maggior parte dei casi a dare 
 risultati migliori rispetto al miglior modello.
-
-\section{Tabella di confronto tramite SSIM della media e della media pesata}
-\begin{table}[H] % ambiente table per inserire una didascalia
-    \centering
-    \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
-      \begin{tabular}{|c|c|c|c|c|c|c|}
-      \hline
-      Bioma & SAR-CAM & FANS & SARBM3D & MEDIA & MEDIA PESATA \\ \hline
-      Agricultural & 0.55 & 0.47 & 0.59 & 0.55 & 0.55  \\ \hline
-      Airplane & 0.71 & 0.67 & 0.68 & 0.70 & 0.70  \\ \hline
-      Chaparral & 0.62 & 0.46 & 0.56 & 0.57 & 0.57 \\ \hline
-      Harbor & 0.81 & 0.74 & 0.74 & 0.78 & 0.78 \\ \hline
-      \end{tabular}
-    } % fine resizebox
-    \caption{Confronto dei modelli di despeckling e della loro fusione. 
-              I valori sopra, indicano la media del SSIM di 100 immagini rappresentanti diversi biomi.
-              Ogni modello per la previsione della qualità, usato in MEDIA PESATA, 
-              è stato allenato per 10 epoche con un dataset da 30'000 
-              immagini. }
-    \label{tab:valoriSSIM_MN_MP}
-  \end{table}  
-  Anche dai dati riportati nella tabella \ref{tab:valoriSSIM_MN_MP} si osserva come sia la MEDIA sia la MEDIA PESATA 
-  tendano a riflettere le prestazioni del modello migliore in termini di SSIM. La qualità strutturale dell’immagine 
-  non risulta mai inferiore o pari a quella del modello meno performante, confermando che, sebbene questo 
-  approccio non rappresenti la soluzione ottimale, costituisce comunque un buon compromesso tra i diversi modelli.
+Anche dai dati riportati nella tabella \ref{tab:valoriSSIM_MN_MP} si osserva come sia la MEDIA sia la MEDIA PESATA 
+tendano a riflettere le prestazioni del modello migliore in termini di SSIM. La qualità strutturale dell’immagine 
+non risulta mai inferiore o pari a quella del modello meno performante, confermando che, sebbene questo 
+approccio non rappresenti la soluzione ottimale, costituisce comunque un buon compromesso tra i diversi modelli.
   \section{Tabella di confronto tramite PSNR del modello crossfuse}
   \begin{table}[H] % ambiente table per inserire una didascalia
     \centering
@@ -114,7 +112,6 @@ risultati migliori rispetto al miglior modello.
     \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite PSNR.}
     \label{tab:valoriPSNR_CF_CFL}
   \end{table}     
-  \section{Tabella di confronto tramite SSIM del modello crossfuse}
   \begin{table}[H] % ambiente table per inserire una didascalia
     \centering
     \resizebox{1.0\textwidth}{!}{% <-- qui scegli quanto ridurla (0.9 = 90%)
@@ -130,25 +127,33 @@ risultati migliori rispetto al miglior modello.
     \caption{Confronto dei modelli di despeckling e della loro fusione tramite CrossFuse tramite SSIM.}
     \label{tab:valoriSSIM_CF_CFL}
   \end{table}     
-  
+Dalle tabelle \ref{tab:valoriPSNR_CF_CFL} e \ref{tab:valoriSSIM_CF_CFL} si osserva che in CrossFuse, i valori sono 
+inferiori ai singoli modelli di despeckling. Questo è dovuto probabilmente all'eccessiva complessità del modello che non 
+è pensato per la fusione di dati monomodali. Viceversa la versione semplificata tende ad ottenere risultati migliori in alcuni biomi, 
+arrivando anche a superare i risultati ottenuti dalle singole tecniche. 
+
+
+
+
+
   \section{Confronto visivo dei vari modelli}
   \subsubsection{Media pesata}
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.1\textwidth]{utils/MPairplane00.png}
-    \caption{fusione di immagini di aerei tramite media pesata}
+    \caption{Fusione di immagini di aerei tramite media pesata.}
     \label{fig:airplane00MP}
   \end{figure}
 Confrontando i singoli modelli di despeckling con il ground truth si puo notare come sia SARBM3D che FANS abbiano 
 perso dettagli sematici importanti durante il denoising come ad esempio l'aero più piccolo e il corpo principale degli aerei accanto sono spariti dall'immagine despeckled.
 SARCAM invece preserva meglio le informazioni semantiche eseguendo un despeckling che si avvicina di più all'immagine clean.
 Nell'immagine con i tre modelli fusi tramite la media pesata notiamo che sono stati riportati gli aerei che si erano persi in FANS e SARBM3D. 
-Cio torna con l'analisi fatta con le metriche come PSNR e SSIM in cui l'immagine fusa tende sempre ad allinearsi al modello migliore senza fare mai 
+Ciò torna con l'analisi fatta con le metriche come PSNR e SSIM in cui l'immagine fusa tende sempre ad allinearsi al modello migliore senza fare mai 
 peggio del modello meno efficace.
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.1\textwidth]{utils/MPharbor03.png}
-    \caption{fusione di immagini di un molo tramite media pesata}
+    \caption{Fusione di immagini di un molo tramite media pesata.}
     \label{fig:airplane00MP}
   \end{figure}
   In questo caso la fusione ha omogeneizzato i dettagli delle imbarcazioni riportando però in maniera soddisfacente le strutture sia delle 
@@ -160,13 +165,13 @@ peggio del modello meno efficace.
 \begin{figure}[H] 
     \centering
     \includegraphics[width=1.1\textwidth]{utils/MNairplane00.png}
-    \caption{fusione di immagini di aerei tramite media aritmetica}
+    \caption{Fusione di immagini di aerei tramite media aritmetica.}
     \label{fig:airplane00MN}
   \end{figure}
   \begin{figure}[H] 
     \centering
     \includegraphics[width=1.0\textwidth]{utils/MNharbor03.png}
-    \caption{fusione di immagini di un molo tramite media aritmetica}
+    \caption{Fusione di immagini di un molo tramite media aritmetica.}
     \label{fig:harbor03MN}
 \end{figure}
 Queste immagini rispecchiano le considerazioni fatte in \ref{tab:valoriPSNR_MN_MP} e \ref{tab:valoriSSIM_MN_MP}, ovvero che 
@@ -177,7 +182,7 @@ fusa tramite media pesata.
 \begin{figure}[H] 
   \centering
   \includegraphics[width=1.1\textwidth]{utils/CFairplane00.png}
-  \caption{fusione di immagini di aerei tramite CrossFuse}
+  \caption{Fusione di immagini di aerei tramite CrossFuse.}
   \label{fig:airplane00CF}
 \end{figure}
 Nel guardare l'immagine fusa tramite CrossFuse si può capire il perchè i valori di PSNR e SSIM siano bassi.
@@ -187,7 +192,7 @@ durante il processo di inferenza. Per questo fenomeno il PSNR e SSIM risultano b
 \begin{figure}[H] 
   \centering
   \includegraphics[width=1.0\textwidth]{utils/CFharbor03.png}
-  \caption{fusione di immagini di un molo tramite CrossFuse}
+  \caption{Fusione di immagini di un molo tramite CrossFuse.}
   \label{fig:harbor03CF}
 \end{figure}
 In questo caso dato che l'immagine di partenza è più scura data la presenza dell'acqua, la granulosità dell'immagine CrossFuse è meno evidente.
@@ -198,7 +203,7 @@ nelle singole immagini despeckled. Anche qui avere immagini più complementari t
 \begin{figure}[H] 
   \centering
   \includegraphics[width=1.1\textwidth]{utils/CFLairplane00.png}
-  \caption{fusione di immagini di aerei tramite architettura monomodale semplificata}
+  \caption{Fusione di immagini di aerei tramite architettura monomodale semplificata.}
   \label{fig:airplane00CFL}
 \end{figure}
 L’immagine fusa ottenuta con l’architettura monomodale semplificata mostra subito l’assenza del 
@@ -210,7 +215,7 @@ maggiore efficacia i dettagli presenti nei singoli modelli despeckled.
 \begin{figure}[H] 
   \centering
   \includegraphics[width=1.0\textwidth]{utils/CFLharbor03.png}
-  \caption{fusione di immagini di un molo tramite architettura monomodale semplificata}
+  \caption{Fusione di immagini di un molo tramite architettura monomodale semplificata.}
   \label{fig:harbor03CFL}
 \end{figure}In presenza di immagini più scure, il pattern granuloso risulta meno evidente; 
 tuttavia, l’architettura monomodale semplificata continua a generare immagini più pulite e
